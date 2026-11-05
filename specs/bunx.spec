@@ -1,0 +1,45 @@
+@	
+a	1	0
+#		1
+v	autocannon	
+v	vite	
+v	babel	
+v	create-react-native-app	
+v	react-native	
+v	tailwindcss	
+v	next	
+v	nuxi	
+v	gltfjsx	
+v	prisma	
+v	eslint	
+v	prettier	
+v	tsc	
+v	typeorm	
+v	@withfig/autocomplete-tools	
+v	create-completion-spec	
+v	@fig/publish-spec-to-team	
+v	fig-teams@latest	
+v	create-next-app	
+v	create-t3-app	
+v	create-discord-bot	
+v	create-video	
+v	remotion	
+v	create-remix	
+v	remix	
+v	playwright	
+v	ignite-cli	
+v	vsce	
+v	degit	
+v	@preset/cli	
+v	mikro-orm	
+v	pod-install	
+v	capacitor	
+v	cap	
+v	@magnolia/cli	
+v	stencil	
+v	swagger-typescript-api	
+v	sta	
+v	@wordpress/create-block	
+v	astro	
+v	ampx	
+d

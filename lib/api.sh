@@ -77,9 +77,113 @@ mrok_git_branches() {
     --format='%(refname:short)	%(subject)' refs/remotes 2>/dev/null | grep -v '/HEAD	'
 }
 
+# ---------------------------------------------------------------- Fig specs
+# specs/<cmd>.spec are converted from github.com/withfig/autocomplete (MIT, see
+# specs/LICENSE.fig). __mrok_spec is the plugin for every command that has one.
+
+__mrok_spec_off="${XDG_CONFIG_HOME:-$HOME/.config}/mrok/specs.off"
+
+__mrok_spec() {
+  local f="$MROK_HOME/specs/$1.spec" out line nat=0 any=0 IFS
+  [ -f "$f" ] || return 1
+  shift
+  IFS=$(printf '\037')
+  out=$(MROK_W="$*" MROK_CUR="$MROK_CUR" awk -f "$MROK_HOME/lib/spec.awk" "$f" 2>/dev/null)
+  IFS=
+  while read -r line; do
+    case $line in
+      '') ;;
+      '!native') nat=1 ;;
+      '!gen	'*) any=1; (unset IFS; eval "${line#*	}") 2>/dev/null | sed '/^[[:space:]]*$/d' ;;
+      *) any=1; printf '%s\n' "$line" ;;
+    esac
+  done <<EOF
+$out
+EOF
+  [ "$any" = 1 ] || [ "$nat" = 0 ]
+}
+
+# Delete the specs of commands that aren't installed (or that the user removed).
+# Runs once, at the first shell start after an install/update, when PATH is complete.
+__mrok_spec_prune() {
+  local f c dir="$MROK_HOME/specs"
+  [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
+  [ -d "$dir" ] && [ ! -e "$dir/.pruned" ] && [ ! -e "$MROK_HOME/.git" ] || return 0
+  for f in "$dir"/*.spec; do
+    [ -f "$f" ] || continue
+    c=${f##*/}; c=${c%.spec}
+    if ! command -v "$c" >/dev/null 2>&1 || { [ -f "$__mrok_spec_off" ] && grep -qxF "$c" "$__mrok_spec_off"; }; then
+      rm -f "$f"
+    fi
+  done
+  : > "$dir/.pruned"
+}
+
+__mrok_load_specs() {
+  local f c
+  [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
+  [ -d "$MROK_HOME/specs" ] || return 0
+  __mrok_spec_prune
+  for f in "$MROK_HOME/specs"/*.spec; do
+    [ -f "$f" ] || continue
+    c=${f##*/}; c=${c%.spec}
+    __mrok_plugins[$c]=__mrok_spec
+  done
+}
+
+__mrok_spec_cmd() {
+  local dir="$MROK_HOME/specs" c f url n
+  [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
+  case ${1-} in
+    add)
+      shift
+      [ $# -gt 0 ] || { echo "usage: mrok spec add <command>..." >&2; return 2; }
+      mkdir -p "$dir"
+      for c in "$@"; do
+        if [ -f "$dir/index" ] && ! cut -f1 "$dir/index" | grep -qxF "$c"; then
+          echo "mrok: no spec for '$c' (see: mrok spec available)" >&2; continue
+        fi
+        url="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/specs/$c.spec"
+        f="$dir/$c.spec.tmp"
+        if command -v curl >/dev/null 2>&1; then curl -fsSL "$url" -o "$f"
+        elif command -v wget >/dev/null 2>&1; then wget -qO "$f" "$url"
+        else echo "mrok: need curl or wget" >&2; return 1
+        fi || { rm -f "$f"; echo "mrok: download failed: $url" >&2; continue; }
+        mv "$f" "$dir/$c.spec"
+        [ -f "$__mrok_spec_off" ] && { grep -vxF "$c" "$__mrok_spec_off" > "$__mrok_spec_off.tmp"; mv "$__mrok_spec_off.tmp" "$__mrok_spec_off"; }
+        [ -n "${__mrok_plugins[$c]-}" ] || __mrok_plugins[$c]=__mrok_spec
+        echo "mrok: added $c"
+      done ;;
+    rm|remove)
+      shift
+      [ $# -gt 0 ] || { echo "usage: mrok spec rm <command>..." >&2; return 2; }
+      mkdir -p "${__mrok_spec_off%/*}"
+      for c in "$@"; do
+        rm -f "$dir/$c.spec"
+        grep -qxF "$c" "$__mrok_spec_off" 2>/dev/null || printf '%s\n' "$c" >> "$__mrok_spec_off"
+        [ "${__mrok_plugins[$c]-}" = __mrok_spec ] && unset "__mrok_plugins[$c]"
+        echo "mrok: removed $c"
+      done ;;
+    list|'')
+      n=0
+      for f in "$dir"/*.spec; do
+        [ -f "$f" ] || continue
+        c=${f##*/}; echo "${c%.spec}"; n=$((n + 1))
+      done
+      [ "$n" -gt 0 ] || echo "no specs installed (mrok spec available / mrok spec add <command>)" ;;
+    available)
+      [ -f "$dir/index" ] && cut -f1 "$dir/index" | column 2>/dev/null || cut -f1 "$dir/index" ;;
+    prune)
+      rm -f "$dir/.pruned"; __mrok_spec_prune; echo "mrok: kept $(ls "$dir" | grep -c '\.spec$') specs" ;;
+    *)
+      echo "usage: mrok spec [list|available|add <cmd>...|rm <cmd>...|prune]" >&2; return 2 ;;
+  esac
+}
+
 # ---------------------------------------------------------------- loading
 __mrok_load_plugins() {
   local f dir
+  __mrok_load_specs
   for dir in "$MROK_HOME/plugins" "${XDG_CONFIG_HOME:-$HOME/.config}/mrok/plugins"; do
     [ -d "$dir" ] || continue
     for f in "$dir"/*.sh; do
@@ -96,7 +200,9 @@ mrok() {
     uninstall)
       sh "$MROK_HOME/install.sh" --uninstall ;;
     plugins)
-      __mrok_list_plugins | sort ;;
+      __mrok_list_plugins | grep -v '	__mrok_spec$' | sort ;;
+    spec|specs)
+      shift; __mrok_spec_cmd "$@" ;;
     version|-v|--version)
       echo "mrok $MROK_VERSION" ;;
     *)
@@ -104,6 +210,7 @@ mrok() {
 mrok: as-you-type suggestion popup
 
   mrok plugins     list commands that have a suggestion plugin
+  mrok spec        list the commands with a Fig spec (also: available, add, rm, prune)
   mrok update      update to the latest version
   mrok uninstall   remove mrok and its line in your shell rc file
   mrok version     print the version

@@ -1,0 +1,13 @@
+@	
+o	-E	Interpret regular expressions followed by -regex and -iregex primaries as extended	
+o	-H	Cause the file information and file type returned for each symbolic link specified to be those…	
+o	-L	Cause the file information and file type returned for each symbolic link to be those of the file…	
+o	-P	Cause the file information and file type returned for each symbolic link to be those for the link…	
+o	-X	Permit find to be safely used in conjunction with xargs	
+o	-d	Cause find to perform a depth-first traversal	
+o	-f	Specify a file hierarch for find to traverse	v
+o	-s	Cause find to traverse the file hierarchies in lexicographical order	
+o	-x	Prevent find from descending into directories that have a device number different than that of the…	
+a	2	1
+#		1
+t	folders

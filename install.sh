@@ -56,6 +56,7 @@ copy_tree() {  # src_dir
   rm -rf "$DEST.new"
   mkdir -p "$DEST.new"
   cp -R "$1/mrok.sh" "$1/install.sh" "$1/lib" "$1/plugins" "$DEST.new/"
+  [ -d "$1/specs" ] && cp -R "$1/specs" "$DEST.new/"
   for f in README.md LICENSE; do
     [ -f "$1/$f" ] && cp "$1/$f" "$DEST.new/"
   done

@@ -1,0 +1,6 @@
+@	
+o	-p	Perform portability checks on the specified pathname arguments, writes messages if 1) path is…	
+o	-P	In addition to the default or -p checks, write a diagnostic for each argument that 1) is empty 2)…	
+a	1	1
+#		1
+t	filepaths

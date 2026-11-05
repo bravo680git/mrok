@@ -1,0 +1,1054 @@
+@	
+s	build|bundle|b	Run webpack (default command, can be omitted)
+s	configtest|t	Validate a webpack configuration
+s	help|h	Display help for command and options
+s	info|i	Display information about your system
+s	init|create|c|new|n	Initialize a new webpack project
+s	loader|l	Scaffold a webpack loader
+s	plugin|p	Scaffold a webpack plugin
+s	serve|server|s	Run the webpack development server
+s	version|v	Display the version number of webpack, webpack-cli, and webpack-dev-server commands
+s	watch|w	Run webpack and watch for file changes
+o	--config|-c	Provide path to a webpack configuration file e.g. ./webpack.config.js	v
+o	--config-name	Name of the configuration to use	v
+o	--merge|-m	Merge two or more configurations using 'webpack-merge'	
+o	--env	Environment passed to the configuration when it is a function	v
+o	--node-env	Sets process.env.NODE_ENV to the specified value	v
+o	--hot|-h	Enables Hot Module Replacement	V
+o	--no-hot	Disables Hot Module Replacement	
+o	--analyze	It invokes webpack-bundle-analyzer plugin to get bundle information	
+o	--progress	Print compilation progress during build	V
+o	--prefetch	Prefetch this request	v
+o	--json|-j	Prints result as JSON or store it in a file	V
+o	--no-amd	Negative 'amd' option	
+o	--bail	Report the first error as a hard error instead of tolerating it	
+o	--no-bail	Negative 'bail' option	
+o	--cache	Enable in memory caching. Disable caching	
+o	--no-cache	Negative 'cache' option	
+o	--cache-cache-unaffected	Additionally cache computation of modules that are unchanged and reference only unchanged modules	
+o	--no-cache-cache-unaffected	Negative 'cache-cache-unaffected' option	
+o	--cache-max-generations	Number of generations unused cache entries stay in memory cache at minimum (1 = may be removed…	v
+o	--cache-type	In memory caching. Filesystem caching	v
+o	--cache-allow-collecting-memory	Allows to collect unused memory allocated during deserialization. This requires copying data into…	
+o	--no-cache-allow-collecting-memory	Negative 'cache-allow-collecting-memory' option	
+o	--cache-cache-directory	Base directory for the cache (defaults to node_modules/.cache/webpack)	v
+o	--cache-cache-location	Locations for the cache (defaults to cacheDirectory / name)	v
+o	--cache-compression	Compression type used for the cache files	v
+o	--no-cache-compression	Negative 'cache-compression' option	
+o	--cache-hash-algorithm	Algorithm used for generation the hash (see node.js crypto package)	v
+o	--cache-idle-timeout	Time in ms after which idle period the cache storing should happen	v
+o	--cache-idle-timeout-after-large-changes	Time in ms after which idle period the cache storing should happen when larger changes has been…	v
+o	--cache-idle-timeout-for-initial-store	Time in ms after which idle period the initial cache storing should happen	v
+o	--cache-immutable-paths	A RegExp matching an immutable directory (usually a package manager cache directory, including the…	v
+o	--cache-immutable-paths-reset	Clear all items provided in 'cache.immutablePaths' configuration. List of paths that are managed…	
+o	--cache-managed-paths	A RegExp matching a managed directory (usually a node_modules directory, including the tailing…	v
+o	--cache-managed-paths-reset	Clear all items provided in 'cache.managedPaths' configuration. List of paths that are managed by…	
+o	--cache-max-age	Time for which unused cache entries stay in the filesystem cache at minimum (in milliseconds)	v
+o	--cache-max-memory-generations	Number of generations unused cache entries stay in memory cache at minimum (0 = no memory cache…	v
+o	--cache-memory-cache-unaffected	Additionally cache computation of modules that are unchanged and reference only unchanged modules…	
+o	--no-cache-memory-cache-unaffected	Negative 'cache-memory-cache-unaffected' option	
+o	--cache-name	Name for the cache. Different names will lead to different coexisting caches	v
+o	--cache-profile	Track and log detailed timing information for individual cache items	
+o	--no-cache-profile	Negative 'cache-profile' option	
+o	--cache-store	When to store data to the filesystem. (pack: Store data when compiler is idle in a single file)	v
+o	--cache-version	Version of the cache data. Different versions won't allow to reuse the cache and override existing…	v
+o	--context	The base directory (absolute path!) for resolving the `entry` option. If `output.pathinfo` is set…	v
+o	--dependencies	References to another configuration to depend on	v
+o	--dependencies-reset	Clear all items provided in 'dependencies' configuration. References to other configurations to…	
+o	--devtool|-d	Determine source maps to use	v
+o	--no-devtool	Do not generate source maps	
+o	--entry	The entry point(s) of your application e.g. ./src/main.js	v
+o	--entry-reset	Clear all items provided in 'entry' configuration. All modules are loaded upon startup. The last…	
+o	--experiments-async-web-assembly	Support WebAssembly as asynchronous EcmaScript Module	
+o	--no-experiments-async-web-assembly	Negative 'experiments-async-web-assembly' option	
+o	--experiments-back-compat	Enable backward-compat layer with deprecation warnings for many webpack 4 APIs	
+o	--no-experiments-back-compat	Negative 'experiments-back-compat' option	
+o	--experiments-build-http-allowed-uris	Allowed URI pattern. Allowed URI (resp. the beginning of it)	v
+o	--experiments-build-http-allowed-uris-reset	Clear all items provided in 'experiments.buildHttp.allowedUris' configuration. List of allowed…	
+o	--experiments-build-http-cache-location	Location where resource content is stored for lockfile entries. It's also possible to disable…	v
+o	--no-experiments-build-http-cache-location	Negative 'experiments-build-http-cache-location' option	
+o	--experiments-build-http-frozen	When set, anything that would lead to a modification of the lockfile or any resource content, will…	
+o	--no-experiments-build-http-frozen	Negative 'experiments-build-http-frozen' option	
+o	--experiments-build-http-lockfile-location	Location of the lockfile	v
+o	--experiments-build-http-proxy	Proxy configuration, which can be used to specify a proxy server to use for HTTP requests	v
+o	--experiments-build-http-upgrade	When set, resources of existing lockfile entries will be fetched and entries will be upgraded when…	
+o	--no-experiments-build-http-upgrade	Negative 'experiments-build-http-upgrade' option	
+o	--experiments-cache-unaffected	Enable additional in memory caching of modules that are unchanged and reference only unchanged…	
+o	--no-experiments-cache-unaffected	Negative 'experiments-cache-unaffected' option	
+o	--experiments-css	Enable css support	
+o	--no-experiments-css	Negative 'experiments-css' option	
+o	--experiments-css-exports-only	Avoid generating and loading a stylesheet and only embed exports from css into output javascript…	
+o	--no-experiments-css-exports-only	Negative 'experiments-css-exports-only' option	
+o	--experiments-future-defaults	Apply defaults of next major version	
+o	--no-experiments-future-defaults	Negative 'experiments-future-defaults' option	
+o	--experiments-layers	Enable module layers	
+o	--no-experiments-layers	Negative 'experiments-layers' option	
+o	--experiments-lazy-compilation	Compile entrypoints and import()s only when they are accessed	
+o	--no-experiments-lazy-compilation	Negative 'experiments-lazy-compilation' option	
+o	--experiments-lazy-compilation-backend-client	A custom client	v
+o	--experiments-lazy-compilation-backend-listen	A port	v
+o	--experiments-lazy-compilation-backend-listen-host	A host	v
+o	--experiments-lazy-compilation-backend-listen-port	A port	v
+o	--experiments-lazy-compilation-backend-protocol	Specifies the protocol the client should use to connect to the server	v
+o	--experiments-lazy-compilation-entries	Enable/disable lazy compilation for entries	
+o	--no-experiments-lazy-compilation-entries	Negative 'experiments-lazy-compilation-entries' option	
+o	--experiments-lazy-compilation-imports	Enable/disable lazy compilation for import() modules	
+o	--no-experiments-lazy-compilation-imports	Negative 'experiments-lazy-compilation-imports' option	
+o	--experiments-lazy-compilation-test	Specify which entrypoints or import()ed modules should be lazily compiled. This is matched with…	v
+o	--experiments-output-module	Allow output javascript files as module source type	
+o	--no-experiments-output-module	Negative 'experiments-output-module' option	
+o	--experiments-sync-web-assembly	Support WebAssembly as synchronous EcmaScript Module (outdated)	
+o	--no-experiments-sync-web-assembly	Negative 'experiments-sync-web-assembly' option	
+o	--experiments-top-level-await	Allow using top-level-await in EcmaScript Modules	
+o	--no-experiments-top-level-await	Negative 'experiments-top-level-await' option	
+o	--externals	Every matched dependency becomes external. An exact matched dependency becomes external. The same…	v
+o	--externals-reset	Clear all items provided in 'externals' configuration. Specify dependencies that shouldn't be…	
+o	--externals-presets-electron	Treat common electron built-in modules in main and preload context like 'electron', 'ipc' or…	
+o	--no-externals-presets-electron	Negative 'externals-presets-electron' option	
+o	--externals-presets-electron-main	Treat electron built-in modules in the main context like 'app', 'ipc-main' or 'shell' as external…	
+o	--no-externals-presets-electron-main	Negative 'externals-presets-electron-main' option	
+o	--externals-presets-electron-preload	Treat electron built-in modules in the preload context like 'web-frame', 'ipc-renderer' or 'shell'…	
+o	--no-externals-presets-electron-preload	Negative 'externals-presets-electron-preload' option	
+o	--externals-presets-electron-renderer	Treat electron built-in modules in the renderer context like 'web-frame', 'ipc-renderer' or…	
+o	--no-externals-presets-electron-renderer	Negative 'externals-presets-electron-renderer' option	
+o	--externals-presets-node	Treat node.js built-in modules like fs, path or vm as external and load them via require() when used	
+o	--no-externals-presets-node	Negative 'externals-presets-node' option	
+o	--externals-presets-nwjs	Treat NW.js legacy nw.gui module as external and load it via require() when used	
+o	--no-externals-presets-nwjs	Negative 'externals-presets-nwjs' option	
+o	--externals-presets-web	Treat references to 'http(s)://...' and 'std:...' as external and load them via import when used…	
+o	--no-externals-presets-web	Negative 'externals-presets-web' option	
+o	--externals-presets-web-async	Treat references to 'http(s)://...' and 'std:...' as external and load them via async import()…	
+o	--no-externals-presets-web-async	Negative 'externals-presets-web-async' option	
+o	--externals-type	Specifies the default type of externals ('amd*', 'umd*', 'system' and 'jsonp' depend on…	v
+o	--ignore-warnings	A RegExp to select the warning message	v
+o	--ignore-warnings-file	A RegExp to select the origin file for the warning	v
+o	--ignore-warnings-message	A RegExp to select the warning message	v
+o	--ignore-warnings-module	A RegExp to select the origin module for the warning	v
+o	--ignore-warnings-reset	Clear all items provided in 'ignoreWarnings' configuration. Ignore specific warnings	
+o	--infrastructure-logging-append-only	Only appends lines to the output. Avoids updating existing output e. g. for status messages. This…	
+o	--no-infrastructure-logging-append-only	Negative 'infrastructure-logging-append-only' option	
+o	--infrastructure-logging-colors	Enables/Disables colorful output. This option is only used when no custom console is provided	
+o	--no-infrastructure-logging-colors	Negative 'infrastructure-logging-colors' option	
+o	--infrastructure-logging-debug	Enable/Disable debug logging for all loggers. Enable debug logging for specific loggers	V
+o	--no-infrastructure-logging-debug	Negative 'infrastructure-logging-debug' option	
+o	--infrastructure-logging-debug-reset	Clear all items provided in 'infrastructureLogging.debug' configuration. Enable debug logging for…	
+o	--infrastructure-logging-level	Log level	v
+o	--mode	Defines the mode to pass to webpack	v
+o	--module-expr-context-critical	Enable warnings for full dynamic dependencies	
+o	--no-module-expr-context-critical	Negative 'module-expr-context-critical' option	
+o	--module-expr-context-recursive	Enable recursive directory lookup for full dynamic dependencies. Deprecated: This option has moved…	
+o	--no-module-expr-context-recursive	Negative 'module-expr-context-recursive' option	
+o	--module-expr-context-reg-exp	Sets the default regular expression for full dynamic dependencies. Deprecated: This option has…	V
+o	--no-module-expr-context-reg-exp	Negative 'module-expr-context-reg-exp' option	
+o	--module-expr-context-request	Set the default request for full dynamic dependencies. Deprecated: This option has moved to…	v
+o	--module-generator-asset-data-url-encoding	Asset encoding (defaults to base64)	v
+o	--no-module-generator-asset-data-url-encoding	Negative 'module-generator-asset-data-url-encoding' option	
+o	--module-generator-asset-data-url-mimetype	Asset mimetype (getting from file extension by default)	v
+o	--module-generator-asset-emit	Emit an output asset from this asset module. This can be set to 'false' to omit emitting e. g. for…	
+o	--no-module-generator-asset-emit	Negative 'module-generator-asset-emit' option	
+o	--module-generator-asset-filename	Specifies the filename template of output files on disk. You must **not** specify an absolute path…	v
+o	--module-generator-asset-output-path	Emit the asset in the specified folder relative to 'output.path'. This should only be needed when…	v
+o	--module-generator-asset-public-path	The 'publicPath' specifies the public URL address of the output files when referenced in a browser	v
+o	--module-generator-asset-inline-data-url-encoding	Asset encoding (defaults to base64)	v
+o	--no-module-generator-asset-inline-data-url-encoding	Negative 'module-generator-asset-inline-data-url-encoding' option	
+o	--module-generator-asset-inline-data-url-mimetype	Asset mimetype (getting from file extension by default)	v
+o	--module-generator-asset-resource-emit	Emit an output asset from this asset module. This can be set to 'false' to omit emitting e. g. for…	
+o	--no-module-generator-asset-resource-emit	Negative 'module-generator-asset-resource-emit' option	
+o	--module-generator-asset-resource-filename	Specifies the filename template of output files on disk. You must **not** specify an absolute path…	v
+o	--module-generator-asset-resource-output-path	Emit the asset in the specified folder relative to 'output.path'. This should only be needed when…	v
+o	--module-generator-asset-resource-public-path	The 'publicPath' specifies the public URL address of the output files when referenced in a browser	v
+o	--module-no-parse	A regular expression, when matched the module is not parsed. An absolute path, when the module…	v
+o	--module-no-parse-reset	Clear all items provided in 'module.noParse' configuration. Don't parse files matching. It's…	
+o	--module-parser-asset-data-url-condition-max-size	Maximum size of asset that should be inline as modules. Default: 8kb	v
+o	--no-module-parser-javascript-amd	Negative 'module-parser-javascript-amd' option	
+o	--module-parser-javascript-browserify	Enable/disable special handling for browserify bundles	
+o	--no-module-parser-javascript-browserify	Negative 'module-parser-javascript-browserify' option	
+o	--module-parser-javascript-commonjs	Enable/disable parsing of CommonJs syntax	
+o	--no-module-parser-javascript-commonjs	Negative 'module-parser-javascript-commonjs' option	
+o	--module-parser-javascript-commonjs-magic-comments	Enable/disable parsing of magic comments in CommonJs syntax	
+o	--no-module-parser-javascript-commonjs-magic-comments	Negative 'module-parser-javascript-commonjs-magic-comments' option	
+o	--module-parser-javascript-exports-presence	Specifies the behavior of invalid export names in "import ... from ..." and "export ... from ..."	v
+o	--no-module-parser-javascript-exports-presence	Negative 'module-parser-javascript-exports-presence' option	
+o	--module-parser-javascript-expr-context-critical	Enable warnings for full dynamic dependencies	
+o	--no-module-parser-javascript-expr-context-critical	Negative 'module-parser-javascript-expr-context-critical' option	
+o	--module-parser-javascript-expr-context-recursive	Enable recursive directory lookup for full dynamic dependencies	
+o	--no-module-parser-javascript-expr-context-recursive	Negative 'module-parser-javascript-expr-context-recursive' option	
+o	--module-parser-javascript-expr-context-reg-exp	Sets the default regular expression for full dynamic dependencies	V
+o	--no-module-parser-javascript-expr-context-reg-exp	Negative 'module-parser-javascript-expr-context-reg-exp' option	
+o	--module-parser-javascript-expr-context-request	Set the default request for full dynamic dependencies	v
+o	--module-parser-javascript-harmony	Enable/disable parsing of EcmaScript Modules syntax	
+o	--no-module-parser-javascript-harmony	Negative 'module-parser-javascript-harmony' option	
+o	--module-parser-javascript-import	Enable/disable parsing of import() syntax	
+o	--no-module-parser-javascript-import	Negative 'module-parser-javascript-import' option	
+o	--module-parser-javascript-import-exports-presence	Specifies the behavior of invalid export names in "import ... from ..."	v
+o	--no-module-parser-javascript-import-exports-presence	Negative 'module-parser-javascript-import-exports-presence' option	
+o	--module-parser-javascript-import-meta	Enable/disable evaluating import.meta	
+o	--no-module-parser-javascript-import-meta	Negative 'module-parser-javascript-import-meta' option	
+o	--module-parser-javascript-import-meta-context	Enable/disable evaluating import.meta.webpackContext	
+o	--no-module-parser-javascript-import-meta-context	Negative 'module-parser-javascript-import-meta-context' option	
+o	--no-module-parser-javascript-node	Negative 'module-parser-javascript-node' option	
+o	--module-parser-javascript-node-dirname	Include a polyfill for the '__dirname' variable	V
+o	--no-module-parser-javascript-node-dirname	Negative 'module-parser-javascript-node-dirname' option	
+o	--module-parser-javascript-node-filename	Include a polyfill for the '__filename' variable	V
+o	--no-module-parser-javascript-node-filename	Negative 'module-parser-javascript-node-filename' option	
+o	--module-parser-javascript-node-global	Include a polyfill for the 'global' variable	V
+o	--no-module-parser-javascript-node-global	Negative 'module-parser-javascript-node-global' option	
+o	--module-parser-javascript-reexport-exports-presence	Specifies the behavior of invalid export names in "export ... from ...". This might be useful to…	v
+o	--no-module-parser-javascript-reexport-exports-presence	Negative 'module-parser-javascript-reexport-exports-presence' option	
+o	--module-parser-javascript-require-context	Enable/disable parsing of require.context syntax	
+o	--no-module-parser-javascript-require-context	Negative 'module-parser-javascript-require-context' option	
+o	--module-parser-javascript-require-ensure	Enable/disable parsing of require.ensure syntax	
+o	--no-module-parser-javascript-require-ensure	Negative 'module-parser-javascript-require-ensure' option	
+o	--module-parser-javascript-require-include	Enable/disable parsing of require.include syntax	
+o	--no-module-parser-javascript-require-include	Negative 'module-parser-javascript-require-include' option	
+o	--module-parser-javascript-require-js	Enable/disable parsing of require.js special syntax like require.config, requirejs.config…	
+o	--no-module-parser-javascript-require-js	Negative 'module-parser-javascript-require-js' option	
+o	--module-parser-javascript-strict-export-presence	Deprecated in favor of "exportsPresence". Emit errors instead of warnings when imported names…	
+o	--no-module-parser-javascript-strict-export-presence	Negative 'module-parser-javascript-strict-export-presence' option	
+o	--module-parser-javascript-strict-this-context-on-imports	Handle the this context correctly according to the spec for namespace objects	
+o	--no-module-parser-javascript-strict-this-context-on-imports	Negative 'module-parser-javascript-strict-this-context-on-imports' option	
+o	--module-parser-javascript-system	Enable/disable parsing of System.js special syntax like System.import, System.get, System.set and…	
+o	--no-module-parser-javascript-system	Negative 'module-parser-javascript-system' option	
+o	--module-parser-javascript-unknown-context-critical	Enable warnings when using the require function in a not statically analyse-able way	
+o	--no-module-parser-javascript-unknown-context-critical	Negative 'module-parser-javascript-unknown-context-critical' option	
+o	--module-parser-javascript-unknown-context-recursive	Enable recursive directory lookup when using the require function in a not statically analyse-able…	
+o	--no-module-parser-javascript-unknown-context-recursive	Negative 'module-parser-javascript-unknown-context-recursive' option	
+o	--module-parser-javascript-unknown-context-reg-exp	Sets the regular expression when using the require function in a not statically analyse-able way	V
+o	--no-module-parser-javascript-unknown-context-reg-exp	Negative 'module-parser-javascript-unknown-context-reg-exp' option	
+o	--module-parser-javascript-unknown-context-request	Sets the request when using the require function in a not statically analyse-able way	v
+o	--module-parser-javascript-url	Enable/disable parsing of new URL() syntax	V
+o	--no-module-parser-javascript-url	Negative 'module-parser-javascript-url' option	
+o	--module-parser-javascript-worker	Specify a syntax that should be parsed as WebWorker reference. 'Abc' handles 'new Abc()', 'Abc…	V
+o	--no-module-parser-javascript-worker	Negative 'module-parser-javascript-worker' option	
+o	--module-parser-javascript-worker-reset	Clear all items provided in 'module.parser.javascript.worker' configuration. Disable or configure…	
+o	--module-parser-javascript-wrapped-context-critical	Enable warnings for partial dynamic dependencies	
+o	--no-module-parser-javascript-wrapped-context-critical	Negative 'module-parser-javascript-wrapped-context-critical' option	
+o	--module-parser-javascript-wrapped-context-recursive	Enable recursive directory lookup for partial dynamic dependencies	
+o	--no-module-parser-javascript-wrapped-context-recursive	Negative 'module-parser-javascript-wrapped-context-recursive' option	
+o	--module-parser-javascript-wrapped-context-reg-exp	Set the inner regular expression for partial dynamic dependencies	v
+o	--no-module-parser-javascript-auto-amd	Negative 'module-parser-javascript-auto-amd' option	
+o	--module-parser-javascript-auto-browserify	Enable/disable special handling for browserify bundles	
+o	--no-module-parser-javascript-auto-browserify	Negative 'module-parser-javascript-auto-browserify' option	
+o	--module-parser-javascript-auto-commonjs	Enable/disable parsing of CommonJs syntax	
+o	--no-module-parser-javascript-auto-commonjs	Negative 'module-parser-javascript-auto-commonjs' option	
+o	--module-parser-javascript-auto-commonjs-magic-comments	Enable/disable parsing of magic comments in CommonJs syntax	
+o	--no-module-parser-javascript-auto-commonjs-magic-comments	Negative 'module-parser-javascript-auto-commonjs-magic-comments' option	
+o	--module-parser-javascript-auto-exports-presence	Specifies the behavior of invalid export names in "import ... from ..." and "export ... from ..."	v
+o	--no-module-parser-javascript-auto-exports-presence	Negative 'module-parser-javascript-auto-exports-presence' option	
+o	--module-parser-javascript-auto-expr-context-critical	Enable warnings for full dynamic dependencies	
+o	--no-module-parser-javascript-auto-expr-context-critical	Negative 'module-parser-javascript-auto-expr-context-critical' option	
+o	--module-parser-javascript-auto-expr-context-recursive	Enable recursive directory lookup for full dynamic dependencies	
+o	--no-module-parser-javascript-auto-expr-context-recursive	Negative 'module-parser-javascript-auto-expr-context-recursive' option	
+o	--module-parser-javascript-auto-expr-context-reg-exp	Sets the default regular expression for full dynamic dependencies	V
+o	--no-module-parser-javascript-auto-expr-context-reg-exp	Negative 'module-parser-javascript-auto-expr-context-reg-exp' option	
+o	--module-parser-javascript-auto-expr-context-request	Set the default request for full dynamic dependencies	v
+o	--module-parser-javascript-auto-harmony	Enable/disable parsing of EcmaScript Modules syntax	
+o	--no-module-parser-javascript-auto-harmony	Negative 'module-parser-javascript-auto-harmony' option	
+o	--module-parser-javascript-auto-import	Enable/disable parsing of import() syntax	
+o	--no-module-parser-javascript-auto-import	Negative 'module-parser-javascript-auto-import' option	
+o	--module-parser-javascript-auto-import-exports-presence	Specifies the behavior of invalid export names in "import ... from ..."	v
+o	--no-module-parser-javascript-auto-import-exports-presence	Negative 'module-parser-javascript-auto-import-exports-presence' option	
+o	--module-parser-javascript-auto-import-meta	Enable/disable evaluating import.meta	
+o	--no-module-parser-javascript-auto-import-meta	Negative 'module-parser-javascript-auto-import-meta' option	
+o	--module-parser-javascript-auto-import-meta-context	Enable/disable evaluating import.meta.webpackContext	
+o	--no-module-parser-javascript-auto-import-meta-context	Negative 'module-parser-javascript-auto-import-meta-context' option	
+o	--no-module-parser-javascript-auto-node	Negative 'module-parser-javascript-auto-node' option	
+o	--module-parser-javascript-auto-node-dirname	Include a polyfill for the '__dirname' variable	V
+o	--no-module-parser-javascript-auto-node-dirname	Negative 'module-parser-javascript-auto-node-dirname' option	
+o	--module-parser-javascript-auto-node-filename	Include a polyfill for the '__filename' variable	V
+o	--no-module-parser-javascript-auto-node-filename	Negative 'module-parser-javascript-auto-node-filename' option	
+o	--module-parser-javascript-auto-node-global	Include a polyfill for the 'global' variable	V
+o	--no-module-parser-javascript-auto-node-global	Negative 'module-parser-javascript-auto-node-global' option	
+o	--module-parser-javascript-auto-reexport-exports-presence	Specifies the behavior of invalid export names in "export ... from ...". This might be useful to…	v
+o	--no-module-parser-javascript-auto-reexport-exports-presence	Negative 'module-parser-javascript-auto-reexport-exports-presence' option	
+o	--module-parser-javascript-auto-require-context	Enable/disable parsing of require.context syntax	
+o	--no-module-parser-javascript-auto-require-context	Negative 'module-parser-javascript-auto-require-context' option	
+o	--module-parser-javascript-auto-require-ensure	Enable/disable parsing of require.ensure syntax	
+o	--no-module-parser-javascript-auto-require-ensure	Negative 'module-parser-javascript-auto-require-ensure' option	
+o	--module-parser-javascript-auto-require-include	Enable/disable parsing of require.include syntax	
+o	--no-module-parser-javascript-auto-require-include	Negative 'module-parser-javascript-auto-require-include' option	
+o	--module-parser-javascript-auto-require-js	Enable/disable parsing of require.js special syntax like require.config, requirejs.config…	
+o	--no-module-parser-javascript-auto-require-js	Negative 'module-parser-javascript-auto-require-js' option	
+o	--module-parser-javascript-auto-strict-export-presence	Deprecated in favor of "exportsPresence". Emit errors instead of warnings when imported names…	
+o	--no-module-parser-javascript-auto-strict-export-presence	Negative 'module-parser-javascript-auto-strict-export-presence' option	
+o	--module-parser-javascript-auto-strict-this-context-on-imports	Handle the this context correctly according to the spec for namespace objects	
+o	--no-module-parser-javascript-auto-strict-this-context-on-imports	Negative 'module-parser-javascript-auto-strict-this-context-on-imports' option	
+o	--module-parser-javascript-auto-system	Enable/disable parsing of System.js special syntax like System.import, System.get, System.set and…	
+o	--no-module-parser-javascript-auto-system	Negative 'module-parser-javascript-auto-system' option	
+o	--module-parser-javascript-auto-unknown-context-critical	Enable warnings when using the require function in a not statically analyse-able way	
+o	--no-module-parser-javascript-auto-unknown-context-critical	Negative 'module-parser-javascript-auto-unknown-context-critical' option	
+o	--module-parser-javascript-auto-unknown-context-recursive	Enable recursive directory lookup when using the require function in a not statically analyse-able…	
+o	--no-module-parser-javascript-auto-unknown-context-recursive	Negative 'module-parser-javascript-auto-unknown-context-recursive' option	
+o	--module-parser-javascript-auto-unknown-context-reg-exp	Sets the regular expression when using the require function in a not statically analyse-able way	V
+o	--no-module-parser-javascript-auto-unknown-context-reg-exp	Negative 'module-parser-javascript-auto-unknown-context-reg-exp' option	
+o	--module-parser-javascript-auto-unknown-context-request	Sets the request when using the require function in a not statically analyse-able way	v
+o	--module-parser-javascript-auto-url	Enable/disable parsing of new URL() syntax	V
+o	--no-module-parser-javascript-auto-url	Negative 'module-parser-javascript-auto-url' option	
+o	--module-parser-javascript-auto-worker	Specify a syntax that should be parsed as WebWorker reference. 'Abc' handles 'new Abc()', 'Abc…	V
+o	--no-module-parser-javascript-auto-worker	Negative 'module-parser-javascript-auto-worker' option	
+o	--module-parser-javascript-auto-worker-reset	Clear all items provided in 'module.parser.javascript/auto.worker' configuration. Disable or…	
+o	--module-parser-javascript-auto-wrapped-context-critical	Enable warnings for partial dynamic dependencies	
+o	--no-module-parser-javascript-auto-wrapped-context-critical	Negative 'module-parser-javascript-auto-wrapped-context-critical' option	
+o	--module-parser-javascript-auto-wrapped-context-recursive	Enable recursive directory lookup for partial dynamic dependencies	
+o	--no-module-parser-javascript-auto-wrapped-context-recursive	Negative 'module-parser-javascript-auto-wrapped-context-recursive' option	
+o	--module-parser-javascript-auto-wrapped-context-reg-exp	Set the inner regular expression for partial dynamic dependencies	v
+o	--no-module-parser-javascript-dynamic-amd	Negative 'module-parser-javascript-dynamic-amd' option	
+o	--module-parser-javascript-dynamic-browserify	Enable/disable special handling for browserify bundles	
+o	--no-module-parser-javascript-dynamic-browserify	Negative 'module-parser-javascript-dynamic-browserify' option	
+o	--module-parser-javascript-dynamic-commonjs	Enable/disable parsing of CommonJs syntax	
+o	--no-module-parser-javascript-dynamic-commonjs	Negative 'module-parser-javascript-dynamic-commonjs' option	
+o	--module-parser-javascript-dynamic-commonjs-magic-comments	Enable/disable parsing of magic comments in CommonJs syntax	
+o	--no-module-parser-javascript-dynamic-commonjs-magic-comments	Negative 'module-parser-javascript-dynamic-commonjs-magic-comments' option	
+o	--module-parser-javascript-dynamic-exports-presence	Specifies the behavior of invalid export names in "import ... from ..." and "export ... from ..."	v
+o	--no-module-parser-javascript-dynamic-exports-presence	Negative 'module-parser-javascript-dynamic-exports-presence' option	
+o	--module-parser-javascript-dynamic-expr-context-critical	Enable warnings for full dynamic dependencies	
+o	--no-module-parser-javascript-dynamic-expr-context-critical	Negative 'module-parser-javascript-dynamic-expr-context-critical' option	
+o	--module-parser-javascript-dynamic-expr-context-recursive	Enable recursive directory lookup for full dynamic dependencies	
+o	--no-module-parser-javascript-dynamic-expr-context-recursive	Negative 'module-parser-javascript-dynamic-expr-context-recursive' option	
+o	--module-parser-javascript-dynamic-expr-context-reg-exp	Sets the default regular expression for full dynamic dependencies	V
+o	--no-module-parser-javascript-dynamic-expr-context-reg-exp	Negative 'module-parser-javascript-dynamic-expr-context-reg-exp' option	
+o	--module-parser-javascript-dynamic-expr-context-request	Set the default request for full dynamic dependencies	v
+o	--module-parser-javascript-dynamic-harmony	Enable/disable parsing of EcmaScript Modules syntax	
+o	--no-module-parser-javascript-dynamic-harmony	Negative 'module-parser-javascript-dynamic-harmony' option	
+o	--module-parser-javascript-dynamic-import	Enable/disable parsing of import() syntax	
+o	--no-module-parser-javascript-dynamic-import	Negative 'module-parser-javascript-dynamic-import' option	
+o	--module-parser-javascript-dynamic-import-exports-presence	Specifies the behavior of invalid export names in "import ... from ..."	v
+o	--no-module-parser-javascript-dynamic-import-exports-presence	Negative 'module-parser-javascript-dynamic-import-exports-presence' option	
+o	--module-parser-javascript-dynamic-import-meta	Enable/disable evaluating import.meta	
+o	--no-module-parser-javascript-dynamic-import-meta	Negative 'module-parser-javascript-dynamic-import-meta' option	
+o	--module-parser-javascript-dynamic-import-meta-context	Enable/disable evaluating import.meta.webpackContext	
+o	--no-module-parser-javascript-dynamic-import-meta-context	Negative 'module-parser-javascript-dynamic-import-meta-context' option	
+o	--no-module-parser-javascript-dynamic-node	Negative 'module-parser-javascript-dynamic-node' option	
+o	--module-parser-javascript-dynamic-node-dirname	Include a polyfill for the '__dirname' variable	V
+o	--no-module-parser-javascript-dynamic-node-dirname	Negative 'module-parser-javascript-dynamic-node-dirname' option	
+o	--module-parser-javascript-dynamic-node-filename	Include a polyfill for the '__filename' variable	V
+o	--no-module-parser-javascript-dynamic-node-filename	Negative 'module-parser-javascript-dynamic-node-filename' option	
+o	--module-parser-javascript-dynamic-node-global	Include a polyfill for the 'global' variable	V
+o	--no-module-parser-javascript-dynamic-node-global	Negative 'module-parser-javascript-dynamic-node-global' option	
+o	--module-parser-javascript-dynamic-reexport-exports-presence	Specifies the behavior of invalid export names in "export ... from ...". This might be useful to…	v
+o	--no-module-parser-javascript-dynamic-reexport-exports-presence	Negative 'module-parser-javascript-dynamic-reexport-exports-presence' option	
+o	--module-parser-javascript-dynamic-require-context	Enable/disable parsing of require.context syntax	
+o	--no-module-parser-javascript-dynamic-require-context	Negative 'module-parser-javascript-dynamic-require-context' option	
+o	--module-parser-javascript-dynamic-require-ensure	Enable/disable parsing of require.ensure syntax	
+o	--no-module-parser-javascript-dynamic-require-ensure	Negative 'module-parser-javascript-dynamic-require-ensure' option	
+o	--module-parser-javascript-dynamic-require-include	Enable/disable parsing of require.include syntax	
+o	--no-module-parser-javascript-dynamic-require-include	Negative 'module-parser-javascript-dynamic-require-include' option	
+o	--module-parser-javascript-dynamic-require-js	Enable/disable parsing of require.js special syntax like require.config, requirejs.config…	
+o	--no-module-parser-javascript-dynamic-require-js	Negative 'module-parser-javascript-dynamic-require-js' option	
+o	--module-parser-javascript-dynamic-strict-export-presence	Deprecated in favor of "exportsPresence". Emit errors instead of warnings when imported names…	
+o	--no-module-parser-javascript-dynamic-strict-export-presence	Negative 'module-parser-javascript-dynamic-strict-export-presence' option	
+o	--module-parser-javascript-dynamic-strict-this-context-on-imports	Handle the this context correctly according to the spec for namespace objects	
+o	--no-module-parser-javascript-dynamic-strict-this-context-on-imports	Negative 'module-parser-javascript-dynamic-strict-this-context-on-imports' option	
+o	--module-parser-javascript-dynamic-system	Enable/disable parsing of System.js special syntax like System.import, System.get, System.set and…	
+o	--no-module-parser-javascript-dynamic-system	Negative 'module-parser-javascript-dynamic-system' option	
+o	--module-parser-javascript-dynamic-unknown-context-critical	Enable warnings when using the require function in a not statically analyse-able way	
+o	--no-module-parser-javascript-dynamic-unknown-context-critical	Negative 'module-parser-javascript-dynamic-unknown-context-critical' option	
+o	--module-parser-javascript-dynamic-unknown-context-recursive	Enable recursive directory lookup when using the require function in a not statically analyse-able…	
+o	--no-module-parser-javascript-dynamic-unknown-context-recursive	Negative 'module-parser-javascript-dynamic-unknown-context-recursive' option	
+o	--module-parser-javascript-dynamic-unknown-context-reg-exp	Sets the regular expression when using the require function in a not statically analyse-able way	V
+o	--no-module-parser-javascript-dynamic-unknown-context-reg-exp	Negative 'module-parser-javascript-dynamic-unknown-context-reg-exp' option	
+o	--module-parser-javascript-dynamic-unknown-context-request	Sets the request when using the require function in a not statically analyse-able way	v
+o	--module-parser-javascript-dynamic-url	Enable/disable parsing of new URL() syntax	V
+o	--no-module-parser-javascript-dynamic-url	Negative 'module-parser-javascript-dynamic-url' option	
+o	--module-parser-javascript-dynamic-worker	Specify a syntax that should be parsed as WebWorker reference. 'Abc' handles 'new Abc()', 'Abc…	V
+o	--no-module-parser-javascript-dynamic-worker	Negative 'module-parser-javascript-dynamic-worker' option	
+o	--module-parser-javascript-dynamic-worker-reset	Clear all items provided in 'module.parser.javascript/dynamic.worker' configuration. Disable or…	
+o	--module-parser-javascript-dynamic-wrapped-context-critical	Enable warnings for partial dynamic dependencies	
+o	--no-module-parser-javascript-dynamic-wrapped-context-critical	Negative 'module-parser-javascript-dynamic-wrapped-context-critical' option	
+o	--module-parser-javascript-dynamic-wrapped-context-recursive	Enable recursive directory lookup for partial dynamic dependencies	
+o	--no-module-parser-javascript-dynamic-wrapped-context-recursive	Negative 'module-parser-javascript-dynamic-wrapped-context-recursive' option	
+o	--module-parser-javascript-dynamic-wrapped-context-reg-exp	Set the inner regular expression for partial dynamic dependencies	v
+o	--no-module-parser-javascript-esm-amd	Negative 'module-parser-javascript-esm-amd' option	
+o	--module-parser-javascript-esm-browserify	Enable/disable special handling for browserify bundles	
+o	--no-module-parser-javascript-esm-browserify	Negative 'module-parser-javascript-esm-browserify' option	
+o	--module-parser-javascript-esm-commonjs	Enable/disable parsing of CommonJs syntax	
+o	--no-module-parser-javascript-esm-commonjs	Negative 'module-parser-javascript-esm-commonjs' option	
+o	--module-parser-javascript-esm-commonjs-magic-comments	Enable/disable parsing of magic comments in CommonJs syntax	
+o	--no-module-parser-javascript-esm-commonjs-magic-comments	Negative 'module-parser-javascript-esm-commonjs-magic-comments' option	
+o	--module-parser-javascript-esm-exports-presence	Specifies the behavior of invalid export names in "import ... from ..." and "export ... from ..."	v
+o	--no-module-parser-javascript-esm-exports-presence	Negative 'module-parser-javascript-esm-exports-presence' option	
+o	--module-parser-javascript-esm-expr-context-critical	Enable warnings for full dynamic dependencies	
+o	--no-module-parser-javascript-esm-expr-context-critical	Negative 'module-parser-javascript-esm-expr-context-critical' option	
+o	--module-parser-javascript-esm-expr-context-recursive	Enable recursive directory lookup for full dynamic dependencies	
+o	--no-module-parser-javascript-esm-expr-context-recursive	Negative 'module-parser-javascript-esm-expr-context-recursive' option	
+o	--module-parser-javascript-esm-expr-context-reg-exp	Sets the default regular expression for full dynamic dependencies	V
+o	--no-module-parser-javascript-esm-expr-context-reg-exp	Negative 'module-parser-javascript-esm-expr-context-reg-exp' option	
+o	--module-parser-javascript-esm-expr-context-request	Set the default request for full dynamic dependencies	v
+o	--module-parser-javascript-esm-harmony	Enable/disable parsing of EcmaScript Modules syntax	
+o	--no-module-parser-javascript-esm-harmony	Negative 'module-parser-javascript-esm-harmony' option	
+o	--module-parser-javascript-esm-import	Enable/disable parsing of import() syntax	
+o	--no-module-parser-javascript-esm-import	Negative 'module-parser-javascript-esm-import' option	
+o	--module-parser-javascript-esm-import-exports-presence	Specifies the behavior of invalid export names in "import ... from ..."	v
+o	--no-module-parser-javascript-esm-import-exports-presence	Negative 'module-parser-javascript-esm-import-exports-presence' option	
+o	--module-parser-javascript-esm-import-meta	Enable/disable evaluating import.meta	
+o	--no-module-parser-javascript-esm-import-meta	Negative 'module-parser-javascript-esm-import-meta' option	
+o	--module-parser-javascript-esm-import-meta-context	Enable/disable evaluating import.meta.webpackContext	
+o	--no-module-parser-javascript-esm-import-meta-context	Negative 'module-parser-javascript-esm-import-meta-context' option	
+o	--no-module-parser-javascript-esm-node	Negative 'module-parser-javascript-esm-node' option	
+o	--module-parser-javascript-esm-node-dirname	Include a polyfill for the '__dirname' variable	V
+o	--no-module-parser-javascript-esm-node-dirname	Negative 'module-parser-javascript-esm-node-dirname' option	
+o	--module-parser-javascript-esm-node-filename	Include a polyfill for the '__filename' variable	V
+o	--no-module-parser-javascript-esm-node-filename	Negative 'module-parser-javascript-esm-node-filename' option	
+o	--module-parser-javascript-esm-node-global	Include a polyfill for the 'global' variable	V
+o	--no-module-parser-javascript-esm-node-global	Negative 'module-parser-javascript-esm-node-global' option	
+o	--module-parser-javascript-esm-reexport-exports-presence	Specifies the behavior of invalid export names in "export ... from ...". This might be useful to…	v
+o	--no-module-parser-javascript-esm-reexport-exports-presence	Negative 'module-parser-javascript-esm-reexport-exports-presence' option	
+o	--module-parser-javascript-esm-require-context	Enable/disable parsing of require.context syntax	
+o	--no-module-parser-javascript-esm-require-context	Negative 'module-parser-javascript-esm-require-context' option	
+o	--module-parser-javascript-esm-require-ensure	Enable/disable parsing of require.ensure syntax	
+o	--no-module-parser-javascript-esm-require-ensure	Negative 'module-parser-javascript-esm-require-ensure' option	
+o	--module-parser-javascript-esm-require-include	Enable/disable parsing of require.include syntax	
+o	--no-module-parser-javascript-esm-require-include	Negative 'module-parser-javascript-esm-require-include' option	
+o	--module-parser-javascript-esm-require-js	Enable/disable parsing of require.js special syntax like require.config, requirejs.config…	
+o	--no-module-parser-javascript-esm-require-js	Negative 'module-parser-javascript-esm-require-js' option	
+o	--module-parser-javascript-esm-strict-export-presence	Deprecated in favor of "exportsPresence". Emit errors instead of warnings when imported names…	
+o	--no-module-parser-javascript-esm-strict-export-presence	Negative 'module-parser-javascript-esm-strict-export-presence' option	
+o	--module-parser-javascript-esm-strict-this-context-on-imports	Handle the this context correctly according to the spec for namespace objects	
+o	--no-module-parser-javascript-esm-strict-this-context-on-imports	Negative 'module-parser-javascript-esm-strict-this-context-on-imports' option	
+o	--module-parser-javascript-esm-system	Enable/disable parsing of System.js special syntax like System.import, System.get, System.set and…	
+o	--no-module-parser-javascript-esm-system	Negative 'module-parser-javascript-esm-system' option	
+o	--module-parser-javascript-esm-unknown-context-critical	Enable warnings when using the require function in a not statically analyse-able way	
+o	--no-module-parser-javascript-esm-unknown-context-critical	Negative 'module-parser-javascript-esm-unknown-context-critical' option	
+o	--module-parser-javascript-esm-unknown-context-recursive	Enable recursive directory lookup when using the require function in a not statically analyse-able…	
+o	--no-module-parser-javascript-esm-unknown-context-recursive	Negative 'module-parser-javascript-esm-unknown-context-recursive' option	
+o	--module-parser-javascript-esm-unknown-context-reg-exp	Sets the regular expression when using the require function in a not statically analyse-able way	V
+o	--no-module-parser-javascript-esm-unknown-context-reg-exp	Negative 'module-parser-javascript-esm-unknown-context-reg-exp' option	
+o	--module-parser-javascript-esm-unknown-context-request	Sets the request when using the require function in a not statically analyse-able way	v
+o	--module-parser-javascript-esm-url	Enable/disable parsing of new URL() syntax	V
+o	--no-module-parser-javascript-esm-url	Negative 'module-parser-javascript-esm-url' option	
+o	--module-parser-javascript-esm-worker	Specify a syntax that should be parsed as WebWorker reference. 'Abc' handles 'new Abc()', 'Abc…	V
+o	--no-module-parser-javascript-esm-worker	Negative 'module-parser-javascript-esm-worker' option	
+o	--module-parser-javascript-esm-worker-reset	Clear all items provided in 'module.parser.javascript/esm.worker' configuration. Disable or…	
+o	--module-parser-javascript-esm-wrapped-context-critical	Enable warnings for partial dynamic dependencies	
+o	--no-module-parser-javascript-esm-wrapped-context-critical	Negative 'module-parser-javascript-esm-wrapped-context-critical' option	
+o	--module-parser-javascript-esm-wrapped-context-recursive	Enable recursive directory lookup for partial dynamic dependencies	
+o	--no-module-parser-javascript-esm-wrapped-context-recursive	Negative 'module-parser-javascript-esm-wrapped-context-recursive' option	
+o	--module-parser-javascript-esm-wrapped-context-reg-exp	Set the inner regular expression for partial dynamic dependencies	v
+o	--module-rules-compiler	Match the child compiler name	v
+o	--module-rules-compiler-not	Logical NOT	v
+o	--module-rules-dependency	Match dependency type	v
+o	--module-rules-dependency-not	Logical NOT	v
+o	--module-rules-enforce	Enforce this rule as pre or post step	v
+o	--module-rules-exclude	Shortcut for resource.exclude	v
+o	--module-rules-exclude-not	Logical NOT	v
+o	--module-rules-include	Shortcut for resource.include	v
+o	--module-rules-include-not	Logical NOT	v
+o	--module-rules-issuer	Match the issuer of the module (The module pointing to this module)	v
+o	--module-rules-issuer-not	Logical NOT	v
+o	--module-rules-issuer-layer	Match layer of the issuer of this module (The module pointing to this module)	v
+o	--module-rules-issuer-layer-not	Logical NOT	v
+o	--module-rules-layer	Specifies the layer in which the module should be placed in	v
+o	--module-rules-loader	A loader request	v
+o	--module-rules-mimetype	Match module mimetype when load from Data URI	v
+o	--module-rules-mimetype-not	Logical NOT	v
+o	--module-rules-real-resource	Match the real resource path of the module	v
+o	--module-rules-real-resource-not	Logical NOT	v
+o	--module-rules-resource	Match the resource path of the module	v
+o	--module-rules-resource-not	Logical NOT	v
+o	--module-rules-resource-fragment	Match the resource fragment of the module	v
+o	--module-rules-resource-fragment-not	Logical NOT	v
+o	--module-rules-resource-query	Match the resource query of the module	v
+o	--module-rules-resource-query-not	Logical NOT	v
+o	--module-rules-scheme	Match module scheme	v
+o	--module-rules-scheme-not	Logical NOT	v
+o	--module-rules-side-effects	Flags a module as with or without side effects	
+o	--no-module-rules-side-effects	Negative 'module-rules-side-effects' option	
+o	--module-rules-test	Shortcut for resource.test	v
+o	--module-rules-test-not	Logical NOT	v
+o	--module-rules-type	Module type to use for the module	v
+o	--module-rules-use-ident	Unique loader options identifier	v
+o	--module-rules-use-loader	A loader request	v
+o	--module-rules-use-options	Options passed to a loader	v
+o	--module-rules-use	A loader request	v
+o	--module-rules-reset	Clear all items provided in 'module.rules' configuration. A list of rules	
+o	--module-strict-export-presence	Emit errors instead of warnings when imported names don't exist in imported module. Deprecated…	
+o	--no-module-strict-export-presence	Negative 'module-strict-export-presence' option	
+o	--module-strict-this-context-on-imports	Handle the this context correctly according to the spec for namespace objects. Deprecated: This…	
+o	--no-module-strict-this-context-on-imports	Negative 'module-strict-this-context-on-imports' option	
+o	--module-unknown-context-critical	Enable warnings when using the require function in a not statically analyse-able way. Deprecated…	
+o	--no-module-unknown-context-critical	Negative 'module-unknown-context-critical' option	
+o	--module-unknown-context-recursive	Enable recursive directory lookup when using the require function in a not statically analyse-able…	
+o	--no-module-unknown-context-recursive	Negative 'module-unknown-context-recursive' option	
+o	--module-unknown-context-reg-exp	Sets the regular expression when using the require function in a not statically analyse-able way…	V
+o	--no-module-unknown-context-reg-exp	Negative 'module-unknown-context-reg-exp' option	
+o	--module-unknown-context-request	Sets the request when using the require function in a not statically analyse-able way. Deprecated…	v
+o	--module-unsafe-cache	Cache the resolving of module requests	
+o	--no-module-unsafe-cache	Negative 'module-unsafe-cache' option	
+o	--module-wrapped-context-critical	Enable warnings for partial dynamic dependencies. Deprecated: This option has moved to…	
+o	--no-module-wrapped-context-critical	Negative 'module-wrapped-context-critical' option	
+o	--module-wrapped-context-recursive	Enable recursive directory lookup for partial dynamic dependencies. Deprecated: This option has…	
+o	--no-module-wrapped-context-recursive	Negative 'module-wrapped-context-recursive' option	
+o	--module-wrapped-context-reg-exp	Set the inner regular expression for partial dynamic dependencies. Deprecated: This option has…	v
+o	--name	Name of the configuration. Used when loading multiple configurations	v
+o	--no-node	Negative 'node' option	
+o	--node-dirname	Include a polyfill for the '__dirname' variable	V
+o	--no-node-dirname	Negative 'node-dirname' option	
+o	--node-filename	Include a polyfill for the '__filename' variable	V
+o	--no-node-filename	Negative 'node-filename' option	
+o	--node-global	Include a polyfill for the 'global' variable	V
+o	--no-node-global	Negative 'node-global' option	
+o	--optimization-check-wasm-types	Check for incompatible wasm types when importing/exporting from/to ESM	
+o	--no-optimization-check-wasm-types	Negative 'optimization-check-wasm-types' option	
+o	--optimization-chunk-ids	Define the algorithm to choose chunk ids (named: readable ids for better debugging, deterministic…	v
+o	--no-optimization-chunk-ids	Negative 'optimization-chunk-ids' option	
+o	--optimization-concatenate-modules	Concatenate modules when possible to generate less modules, more efficient code and enable more…	
+o	--no-optimization-concatenate-modules	Negative 'optimization-concatenate-modules' option	
+o	--optimization-emit-on-errors	Emit assets even when errors occur. Critical errors are emitted into the generated code and will…	
+o	--no-optimization-emit-on-errors	Negative 'optimization-emit-on-errors' option	
+o	--optimization-flag-included-chunks	Also flag chunks as loaded which contain a subset of the modules	
+o	--no-optimization-flag-included-chunks	Negative 'optimization-flag-included-chunks' option	
+o	--optimization-inner-graph	Creates a module-internal dependency graph for top level symbols, exports and imports, to improve…	
+o	--no-optimization-inner-graph	Negative 'optimization-inner-graph' option	
+o	--optimization-mangle-exports	Rename exports when possible to generate shorter code (depends on optimization.usedExports and…	V
+o	--no-optimization-mangle-exports	Negative 'optimization-mangle-exports' option	
+o	--optimization-mangle-wasm-imports	Reduce size of WASM by changing imports to shorter strings	
+o	--no-optimization-mangle-wasm-imports	Negative 'optimization-mangle-wasm-imports' option	
+o	--optimization-merge-duplicate-chunks	Merge chunks which contain the same modules	
+o	--no-optimization-merge-duplicate-chunks	Negative 'optimization-merge-duplicate-chunks' option	
+o	--optimization-minimize	Enable minimizing the output. Uses optimization.minimizer	
+o	--no-optimization-minimize	Negative 'optimization-minimize' option	
+o	--optimization-module-ids	Define the algorithm to choose module ids (natural: numeric ids in order of usage, named: readable…	v
+o	--no-optimization-module-ids	Negative 'optimization-module-ids' option	
+o	--optimization-node-env	Set process.env.NODE_ENV to a specific value	v
+o	--no-optimization-node-env	Negative 'optimization-node-env' option	
+o	--optimization-portable-records	Generate records with relative paths to be able to move the context folder	
+o	--no-optimization-portable-records	Negative 'optimization-portable-records' option	
+o	--optimization-provided-exports	Figure out which exports are provided by modules to generate more efficient code	
+o	--no-optimization-provided-exports	Negative 'optimization-provided-exports' option	
+o	--optimization-real-content-hash	Use real [contenthash] based on final content of the assets	
+o	--no-optimization-real-content-hash	Negative 'optimization-real-content-hash' option	
+o	--optimization-remove-available-modules	Removes modules from chunks when these modules are already included in all parents	
+o	--no-optimization-remove-available-modules	Negative 'optimization-remove-available-modules' option	
+o	--optimization-remove-empty-chunks	Remove chunks which are empty	
+o	--no-optimization-remove-empty-chunks	Negative 'optimization-remove-empty-chunks' option	
+o	--optimization-runtime-chunk	Create an additional chunk which contains only the webpack runtime and chunk hash maps	V
+o	--no-optimization-runtime-chunk	Negative 'optimization-runtime-chunk' option	
+o	--optimization-runtime-chunk-name	The name or name factory for the runtime chunks	v
+o	--optimization-side-effects	Skip over modules which contain no side effects when exports are not used (false: disabled…	V
+o	--no-optimization-side-effects	Negative 'optimization-side-effects' option	
+o	--no-optimization-split-chunks	Negative 'optimization-split-chunks' option	
+o	--optimization-split-chunks-automatic-name-delimiter	Sets the name delimiter for created chunks	v
+o	--optimization-split-chunks-chunks	Select chunks for determining shared modules (defaults to "async", "initial" and "all" requires…	v
+o	--optimization-split-chunks-default-size-types	Size type, like 'javascript', 'webassembly'	v
+o	--optimization-split-chunks-default-size-types-reset	Clear all items provided in 'optimization.splitChunks.defaultSizeTypes' configuration. Sets the…	
+o	--optimization-split-chunks-enforce-size-threshold	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-fallback-cache-group-chunks	Select chunks for determining shared modules (defaults to "async", "initial" and "all" requires…	v
+o	--optimization-split-chunks-fallback-cache-group-max-async-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-fallback-cache-group-max-initial-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-fallback-cache-group-max-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-fallback-cache-group-min-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-fallback-cache-group-min-size-reduction	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-filename	Sets the template for the filename for created chunks	v
+o	--optimization-split-chunks-hide-path-info	Prevents exposing path info when creating names for parts splitted by maxSize	
+o	--no-optimization-split-chunks-hide-path-info	Negative 'optimization-split-chunks-hide-path-info' option	
+o	--optimization-split-chunks-max-async-requests	Maximum number of requests which are accepted for on-demand loading	v
+o	--optimization-split-chunks-max-async-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-max-initial-requests	Maximum number of initial chunks which are accepted for an entry point	v
+o	--optimization-split-chunks-max-initial-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-max-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-min-chunks	Minimum number of times a module has to be duplicated until it's considered for splitting	v
+o	--optimization-split-chunks-min-remaining-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-min-size	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-min-size-reduction	Size of the javascript part of the chunk	v
+o	--optimization-split-chunks-name	Give chunks created a name (chunks with equal name are merged)	v
+o	--no-optimization-split-chunks-name	Negative 'optimization-split-chunks-name' option	
+o	--optimization-split-chunks-used-exports	Compare used exports when checking common modules. Modules will only be put in the same chunk when…	
+o	--no-optimization-split-chunks-used-exports	Negative 'optimization-split-chunks-used-exports' option	
+o	--optimization-used-exports	Figure out which exports are used by modules to mangle export names, omit unused exports and…	V
+o	--no-optimization-used-exports	Negative 'optimization-used-exports' option	
+o	--output-asset-module-filename	The filename of asset modules as relative path inside the 'output.path' directory	v
+o	--output-async-chunks	Enable/disable creating async chunks that are loaded on demand	
+o	--no-output-async-chunks	Negative 'output-async-chunks' option	
+o	--output-charset	Add charset attribute for script tag	
+o	--no-output-charset	Negative 'output-charset' option	
+o	--output-chunk-filename	Specifies the filename template of output files on disk. You must **not** specify an absolute path…	v
+o	--output-chunk-format	The format of chunks (formats included by default are 'array-push' (web/WebWorker), 'commonjs'…	v
+o	--no-output-chunk-format	Negative 'output-chunk-format' option	
+o	--output-chunk-load-timeout	Number of milliseconds before chunk request expires	v
+o	--output-chunk-loading	The method of loading chunks (methods included by default are 'jsonp' (web), 'import' (ESM)…	v
+o	--no-output-chunk-loading	Negative 'output-chunk-loading' option	
+o	--output-chunk-loading-global	The global variable used by webpack for loading of chunks	v
+o	--output-clean	Clean the output directory before emit	
+o	--no-output-clean	Negative 'output-clean' option	
+o	--output-clean-dry	Log the assets that should be removed instead of deleting them	
+o	--no-output-clean-dry	Negative 'output-clean-dry' option	
+o	--output-clean-keep	Keep these assets	v
+o	--output-compare-before-emit	Check if to be emitted file already exists and have the same content before writing to output…	
+o	--no-output-compare-before-emit	Negative 'output-compare-before-emit' option	
+o	--output-cross-origin-loading	This option enables cross-origin loading of chunks	v
+o	--no-output-cross-origin-loading	Negative 'output-cross-origin-loading' option	
+o	--output-css-chunk-filename	Specifies the filename template of output files on disk. You must **not** specify an absolute path…	v
+o	--output-css-filename	Specifies the filename template of output files on disk. You must **not** specify an absolute path…	v
+o	--output-devtool-fallback-module-filename-template	Similar to `output.devtoolModuleFilenameTemplate`, but used in the case of duplicate module…	v
+o	--output-devtool-module-filename-template	Filename template string of function for the sources array in a generated SourceMap	v
+o	--output-devtool-namespace	Module namespace to use when interpolating filename template string for the sources array in a…	v
+o	--output-enabled-chunk-loading-types	The method of loading chunks (methods included by default are 'jsonp' (web), 'import' (ESM)…	v
+o	--output-enabled-chunk-loading-types-reset	Clear all items provided in 'output.enabledChunkLoadingTypes' configuration. List of chunk loading…	
+o	--output-enabled-library-types	Type of library (types included by default are 'var', 'module', 'assign', 'assign-properties'…	v
+o	--output-enabled-library-types-reset	Clear all items provided in 'output.enabledLibraryTypes' configuration. List of library types…	
+o	--output-enabled-wasm-loading-types	The method of loading WebAssembly Modules (methods included by default are 'fetch'…	v
+o	--output-enabled-wasm-loading-types-reset	Clear all items provided in 'output.enabledWasmLoadingTypes' configuration. List of wasm loading…	
+o	--output-environment-arrow-function	The environment supports arrow functions ('() => { ... }')	
+o	--no-output-environment-arrow-function	Negative 'output-environment-arrow-function' option	
+o	--output-environment-big-int-literal	The environment supports BigInt as literal (123n)	
+o	--no-output-environment-big-int-literal	Negative 'output-environment-big-int-literal' option	
+o	--output-environment-const	The environment supports const and let for variable declarations	
+o	--no-output-environment-const	Negative 'output-environment-const' option	
+o	--output-environment-destructuring	The environment supports destructuring ('{ a, b } = obj')	
+o	--no-output-environment-destructuring	Negative 'output-environment-destructuring' option	
+o	--output-environment-dynamic-import	The environment supports an async import() function to import EcmaScript modules	
+o	--no-output-environment-dynamic-import	Negative 'output-environment-dynamic-import' option	
+o	--output-environment-for-of	The environment supports 'for of' iteration ('for (const x of array) { ... }')	
+o	--no-output-environment-for-of	Negative 'output-environment-for-of' option	
+o	--output-environment-module	The environment supports EcmaScript Module syntax to import EcmaScript modules (import ... from…	
+o	--no-output-environment-module	Negative 'output-environment-module' option	
+o	--output-environment-optional-chaining	The environment supports optional chaining ('obj?.a' or 'obj?.()')	
+o	--no-output-environment-optional-chaining	Negative 'output-environment-optional-chaining' option	
+o	--output-environment-template-literal	The environment supports template literals	
+o	--no-output-environment-template-literal	Negative 'output-environment-template-literal' option	
+o	--output-filename	Specifies the filename template of output files on disk. You must **not** specify an absolute path…	v
+o	--output-global-object	An expression which is used to address the global object/scope in runtime code	v
+o	--output-hash-digest	Digest type used for the hash	v
+o	--output-hash-digest-length	Number of chars which are used for the hash	v
+o	--output-hash-function	Algorithm used for generation the hash (see node.js crypto package)	v
+o	--output-hash-salt	Any string which is added to the hash to salt it	v
+o	--output-hot-update-chunk-filename	The filename of the Hot Update Chunks. They are inside the output.path directory	v
+o	--output-hot-update-global	The global variable used by webpack for loading of hot update chunks	v
+o	--output-hot-update-main-filename	The filename of the Hot Update Main File. It is inside the 'output.path' directory	v
+o	--output-iife	Wrap javascript code into IIFE's to avoid leaking into global scope	
+o	--no-output-iife	Negative 'output-iife' option	
+o	--output-import-function-name	The name of the native import() function (can be exchanged for a polyfill)	v
+o	--output-import-meta-name	The name of the native import.meta object (can be exchanged for a polyfill)	v
+o	--output-library	A part of the library name	v
+o	--output-library-reset	Clear all items provided in 'output.library' configuration. The name of the library (some types…	
+o	--output-library-amd	Name of the exposed AMD library in the UMD	v
+o	--output-library-commonjs	Name of the exposed commonjs export in the UMD	v
+o	--output-library-root	Part of the name of the property exposed globally by a UMD library	v
+o	--output-library-root-reset	Clear all items provided in 'output.library.root' configuration. Name of the property exposed…	
+o	--output-library-auxiliary-comment	Append the same comment above each import style	v
+o	--output-library-auxiliary-comment-amd	Set comment for `amd` section in UMD	v
+o	--output-library-auxiliary-comment-commonjs	Set comment for `commonjs` (exports) section in UMD	v
+o	--output-library-auxiliary-comment-commonjs2	Set comment for `commonjs2` (module.exports) section in UMD	v
+o	--output-library-auxiliary-comment-root	Set comment for `root` (global variable) section in UMD	v
+o	--output-library-export	Part of the export that should be exposed as library	v
+o	--output-library-export-reset	Clear all items provided in 'output.library.export' configuration. Specify which export should be…	
+o	--output-library-name	A part of the library name	v
+o	--output-library-name-reset	Clear all items provided in 'output.library.name' configuration. The name of the library (some…	
+o	--output-library-name-amd	Name of the exposed AMD library in the UMD	v
+o	--output-library-name-commonjs	Name of the exposed commonjs export in the UMD	v
+o	--output-library-name-root	Part of the name of the property exposed globally by a UMD library	v
+o	--output-library-name-root-reset	Clear all items provided in 'output.library.name.root' configuration. Name of the property exposed…	
+o	--output-library-type	Type of library (types included by default are 'var', 'module', 'assign', 'assign-properties'…	v
+o	--output-library-umd-named-define	If `output.libraryTarget` is set to umd and `output.library` is set, setting this to true will…	
+o	--no-output-library-umd-named-define	Negative 'output-library-umd-named-define' option	
+o	--output-module	Output javascript files as module source type	
+o	--no-output-module	Negative 'output-module' option	
+o	--output-path|-o	Output location of the file generated by webpack e.g. ./dist/	v
+o	--output-pathinfo	Include comments with information about the modules	V
+o	--no-output-pathinfo	Negative 'output-pathinfo' option	
+o	--output-public-path	The 'publicPath' specifies the public URL address of the output files when referenced in a browser	v
+o	--output-script-type	This option enables loading async chunks via a custom script type, such as script type="module"	v
+o	--no-output-script-type	Negative 'output-script-type' option	
+o	--output-source-map-filename	The filename of the SourceMaps for the JavaScript files. They are inside the 'output.path' directory	v
+o	--output-source-prefix	Prefixes every line of the source in the bundle with this string	v
+o	--output-strict-module-error-handling	Handles error in module loading correctly at a performance cost. This will handle module error…	
+o	--no-output-strict-module-error-handling	Negative 'output-strict-module-error-handling' option	
+o	--output-strict-module-exception-handling	Handles exceptions in module loading correctly at a performance cost (Deprecated). This will…	
+o	--no-output-strict-module-exception-handling	Negative 'output-strict-module-exception-handling' option	
+o	--output-trusted-types	Use a Trusted Types policy to create urls for chunks. 'output.uniqueName' is used a default policy…	V
+o	--output-trusted-types-policy-name	The name of the Trusted Types policy created by webpack to serve bundle chunks	v
+o	--output-unique-name	A unique name of the webpack build to avoid multiple webpack runtimes to conflict when using globals	v
+o	--output-wasm-loading	The method of loading WebAssembly Modules (methods included by default are 'fetch'…	v
+o	--no-output-wasm-loading	Negative 'output-wasm-loading' option	
+o	--output-webassembly-module-filename	The filename of WebAssembly modules as relative path inside the 'output.path' directory	v
+o	--output-worker-chunk-loading	The method of loading chunks (methods included by default are 'jsonp' (web), 'import' (ESM)…	v
+o	--no-output-worker-chunk-loading	Negative 'output-worker-chunk-loading' option	
+o	--output-worker-wasm-loading	The method of loading WebAssembly Modules (methods included by default are 'fetch'…	v
+o	--no-output-worker-wasm-loading	Negative 'output-worker-wasm-loading' option	
+o	--parallelism	The number of parallel processed modules in the compilation	v
+o	--no-performance	Negative 'performance' option	
+o	--performance-hints	Sets the format of the hints: warnings, errors or nothing at all	v
+o	--no-performance-hints	Negative 'performance-hints' option	
+o	--performance-max-asset-size	File size limit (in bytes) when exceeded, that webpack will provide performance hints	v
+o	--performance-max-entrypoint-size	Total size of an entry point (in bytes)	v
+o	--profile	Capture timing information for each module	
+o	--no-profile	Negative 'profile' option	
+o	--records-input-path	Store compiler state to a json file	v
+o	--no-records-input-path	Negative 'records-input-path' option	
+o	--records-output-path	Load compiler state from a json file	v
+o	--no-records-output-path	Negative 'records-output-path' option	
+o	--records-path	Store/Load compiler state from/to a json file. This will result in persistent ids of modules and…	v
+o	--no-records-path	Negative 'records-path' option	
+o	--resolve-alias-alias	Ignore request (replace with empty module). New request	v
+o	--no-resolve-alias-alias	Negative 'resolve-alias-alias' option	
+o	--resolve-alias-name	Request to be redirected	v
+o	--resolve-alias-only-module	Redirect only exact matching request	
+o	--no-resolve-alias-only-module	Negative 'resolve-alias-only-module' option	
+o	--resolve-alias-reset	Clear all items provided in 'resolve.alias' configuration. Redirect module requests	
+o	--resolve-alias-fields	Field in the description file (usually package.json) which are used to redirect requests inside…	v
+o	--resolve-alias-fields-reset	Clear all items provided in 'resolve.aliasFields' configuration. Fields in the description file…	
+o	--resolve-cache	Enable caching of successfully resolved requests (cache entries are revalidated)	
+o	--no-resolve-cache	Negative 'resolve-cache' option	
+o	--resolve-cache-with-context	Include the context information in the cache identifier when caching	
+o	--no-resolve-cache-with-context	Negative 'resolve-cache-with-context' option	
+o	--resolve-condition-names	Condition names for exports field entry point	v
+o	--resolve-condition-names-reset	Clear all items provided in 'resolve.conditionNames' configuration. Condition names for exports…	
+o	--resolve-description-files	Filename used to find a description file (like a package.json)	v
+o	--resolve-description-files-reset	Clear all items provided in 'resolve.descriptionFiles' configuration. Filenames used to find a…	
+o	--resolve-enforce-extension	Enforce the resolver to use one of the extensions from the extensions option (User must specify…	
+o	--no-resolve-enforce-extension	Negative 'resolve-enforce-extension' option	
+o	--resolve-exports-fields	Field name from the description file (usually package.json) which is used to provide entry points…	v
+o	--resolve-exports-fields-reset	Clear all items provided in 'resolve.exportsFields' configuration. Field names from the…	
+o	--resolve-extensions	Extension added to the request when trying to find the file	v
+o	--resolve-extensions-reset	Clear all items provided in 'resolve.extensions' configuration. Extensions added to the request…	
+o	--resolve-fallback-alias	Ignore request (replace with empty module). New request	v
+o	--no-resolve-fallback-alias	Negative 'resolve-fallback-alias' option	
+o	--resolve-fallback-name	Request to be redirected	v
+o	--resolve-fallback-only-module	Redirect only exact matching request	
+o	--no-resolve-fallback-only-module	Negative 'resolve-fallback-only-module' option	
+o	--resolve-fallback-reset	Clear all items provided in 'resolve.fallback' configuration. Redirect module requests	
+o	--resolve-fully-specified	Treats the request specified by the user as fully specified, meaning no extensions are added and…	
+o	--no-resolve-fully-specified	Negative 'resolve-fully-specified' option	
+o	--resolve-imports-fields	Field name from the description file (usually package.json) which is used to provide internal…	v
+o	--resolve-imports-fields-reset	Clear all items provided in 'resolve.importsFields' configuration. Field names from the…	
+o	--resolve-main-fields	Field name from the description file (package.json) which are used to find the default entry point	v
+o	--resolve-main-fields-reset	Clear all items provided in 'resolve.mainFields' configuration. Field names from the description…	
+o	--resolve-main-files	Filename used to find the default entry point if there is no description file or main field	v
+o	--resolve-main-files-reset	Clear all items provided in 'resolve.mainFiles' configuration. Filenames used to find the default…	
+o	--resolve-modules	Folder name or directory path where to find modules	v
+o	--resolve-modules-reset	Clear all items provided in 'resolve.modules' configuration. Folder names or directory paths where…	
+o	--resolve-prefer-absolute	Prefer to resolve server-relative URLs (starting with '/') as absolute paths before falling back…	
+o	--no-resolve-prefer-absolute	Negative 'resolve-prefer-absolute' option	
+o	--resolve-prefer-relative	Prefer to resolve module requests as relative request and fallback to resolving as module	
+o	--no-resolve-prefer-relative	Negative 'resolve-prefer-relative' option	
+o	--resolve-restrictions	Resolve restriction. Resolve result must fulfill this restriction	v
+o	--resolve-restrictions-reset	Clear all items provided in 'resolve.restrictions' configuration. A list of resolve restrictions…	
+o	--resolve-roots	Directory in which requests that are server-relative URLs (starting with '/') are resolved	v
+o	--resolve-roots-reset	Clear all items provided in 'resolve.roots' configuration. A list of directories in which requests…	
+o	--resolve-symlinks	Enable resolving symlinks to the original location	
+o	--no-resolve-symlinks	Negative 'resolve-symlinks' option	
+o	--resolve-unsafe-cache	Enable caching of successfully resolved requests (cache entries are not revalidated)	
+o	--no-resolve-unsafe-cache	Negative 'resolve-unsafe-cache' option	
+o	--resolve-use-sync-file-system-calls	Use synchronous filesystem calls for the resolver	
+o	--no-resolve-use-sync-file-system-calls	Negative 'resolve-use-sync-file-system-calls' option	
+o	--resolve-loader-alias-alias	Ignore request (replace with empty module). New request	v
+o	--no-resolve-loader-alias-alias	Negative 'resolve-loader-alias-alias' option	
+o	--resolve-loader-alias-name	Request to be redirected	v
+o	--resolve-loader-alias-only-module	Redirect only exact matching request	
+o	--no-resolve-loader-alias-only-module	Negative 'resolve-loader-alias-only-module' option	
+o	--resolve-loader-alias-reset	Clear all items provided in 'resolveLoader.alias' configuration. Redirect module requests	
+o	--resolve-loader-alias-fields	Field in the description file (usually package.json) which are used to redirect requests inside…	v
+o	--resolve-loader-alias-fields-reset	Clear all items provided in 'resolveLoader.aliasFields' configuration. Fields in the description…	
+o	--resolve-loader-cache	Enable caching of successfully resolved requests (cache entries are revalidated)	
+o	--no-resolve-loader-cache	Negative 'resolve-loader-cache' option	
+o	--resolve-loader-cache-with-context	Include the context information in the cache identifier when caching	
+o	--no-resolve-loader-cache-with-context	Negative 'resolve-loader-cache-with-context' option	
+o	--resolve-loader-condition-names	Condition names for exports field entry point	v
+o	--resolve-loader-condition-names-reset	Clear all items provided in 'resolveLoader.conditionNames' configuration. Condition names for…	
+o	--resolve-loader-description-files	Filename used to find a description file (like a package.json)	v
+o	--resolve-loader-description-files-reset	Clear all items provided in 'resolveLoader.descriptionFiles' configuration. Filenames used to find…	
+o	--resolve-loader-enforce-extension	Enforce the resolver to use one of the extensions from the extensions option (User must specify…	
+o	--no-resolve-loader-enforce-extension	Negative 'resolve-loader-enforce-extension' option	
+o	--resolve-loader-exports-fields	Field name from the description file (usually package.json) which is used to provide entry points…	v
+o	--resolve-loader-exports-fields-reset	Clear all items provided in 'resolveLoader.exportsFields' configuration. Field names from the…	
+o	--resolve-loader-extensions	Extension added to the request when trying to find the file	v
+o	--resolve-loader-extensions-reset	Clear all items provided in 'resolveLoader.extensions' configuration. Extensions added to the…	
+o	--resolve-loader-fallback-alias	Ignore request (replace with empty module). New request	v
+o	--no-resolve-loader-fallback-alias	Negative 'resolve-loader-fallback-alias' option	
+o	--resolve-loader-fallback-name	Request to be redirected	v
+o	--resolve-loader-fallback-only-module	Redirect only exact matching request	
+o	--no-resolve-loader-fallback-only-module	Negative 'resolve-loader-fallback-only-module' option	
+o	--resolve-loader-fallback-reset	Clear all items provided in 'resolveLoader.fallback' configuration. Redirect module requests	
+o	--resolve-loader-fully-specified	Treats the request specified by the user as fully specified, meaning no extensions are added and…	
+o	--no-resolve-loader-fully-specified	Negative 'resolve-loader-fully-specified' option	
+o	--resolve-loader-imports-fields	Field name from the description file (usually package.json) which is used to provide internal…	v
+o	--resolve-loader-imports-fields-reset	Clear all items provided in 'resolveLoader.importsFields' configuration. Field names from the…	
+o	--resolve-loader-main-fields	Field name from the description file (package.json) which are used to find the default entry point	v
+o	--resolve-loader-main-fields-reset	Clear all items provided in 'resolveLoader.mainFields' configuration. Field names from the…	
+o	--resolve-loader-main-files	Filename used to find the default entry point if there is no description file or main field	v
+o	--resolve-loader-main-files-reset	Clear all items provided in 'resolveLoader.mainFiles' configuration. Filenames used to find the…	
+o	--resolve-loader-modules	Folder name or directory path where to find modules	v
+o	--resolve-loader-modules-reset	Clear all items provided in 'resolveLoader.modules' configuration. Folder names or directory paths…	
+o	--resolve-loader-prefer-absolute	Prefer to resolve server-relative URLs (starting with '/') as absolute paths before falling back…	
+o	--no-resolve-loader-prefer-absolute	Negative 'resolve-loader-prefer-absolute' option	
+o	--resolve-loader-prefer-relative	Prefer to resolve module requests as relative request and fallback to resolving as module	
+o	--no-resolve-loader-prefer-relative	Negative 'resolve-loader-prefer-relative' option	
+o	--resolve-loader-restrictions	Resolve restriction. Resolve result must fulfill this restriction	v
+o	--resolve-loader-restrictions-reset	Clear all items provided in 'resolveLoader.restrictions' configuration. A list of resolve…	
+o	--resolve-loader-roots	Directory in which requests that are server-relative URLs (starting with '/') are resolved	v
+o	--resolve-loader-roots-reset	Clear all items provided in 'resolveLoader.roots' configuration. A list of directories in which…	
+o	--resolve-loader-symlinks	Enable resolving symlinks to the original location	
+o	--no-resolve-loader-symlinks	Negative 'resolve-loader-symlinks' option	
+o	--resolve-loader-unsafe-cache	Enable caching of successfully resolved requests (cache entries are not revalidated)	
+o	--no-resolve-loader-unsafe-cache	Negative 'resolve-loader-unsafe-cache' option	
+o	--resolve-loader-use-sync-file-system-calls	Use synchronous filesystem calls for the resolver	
+o	--no-resolve-loader-use-sync-file-system-calls	Negative 'resolve-loader-use-sync-file-system-calls' option	
+o	--snapshot-build-dependencies-hash	Use hashes of the content of the files/directories to determine invalidation	
+o	--no-snapshot-build-dependencies-hash	Negative 'snapshot-build-dependencies-hash' option	
+o	--snapshot-build-dependencies-timestamp	Use timestamps of the files/directories to determine invalidation	
+o	--no-snapshot-build-dependencies-timestamp	Negative 'snapshot-build-dependencies-timestamp' option	
+o	--snapshot-immutable-paths	A RegExp matching an immutable directory (usually a package manager cache directory, including the…	v
+o	--snapshot-immutable-paths-reset	Clear all items provided in 'snapshot.immutablePaths' configuration. List of paths that are…	
+o	--snapshot-managed-paths	A RegExp matching a managed directory (usually a node_modules directory, including the tailing…	v
+o	--snapshot-managed-paths-reset	Clear all items provided in 'snapshot.managedPaths' configuration. List of paths that are managed…	
+o	--snapshot-module-hash	Use hashes of the content of the files/directories to determine invalidation	
+o	--no-snapshot-module-hash	Negative 'snapshot-module-hash' option	
+o	--snapshot-module-timestamp	Use timestamps of the files/directories to determine invalidation	
+o	--no-snapshot-module-timestamp	Negative 'snapshot-module-timestamp' option	
+o	--snapshot-resolve-hash	Use hashes of the content of the files/directories to determine invalidation	
+o	--no-snapshot-resolve-hash	Negative 'snapshot-resolve-hash' option	
+o	--snapshot-resolve-timestamp	Use timestamps of the files/directories to determine invalidation	
+o	--no-snapshot-resolve-timestamp	Negative 'snapshot-resolve-timestamp' option	
+o	--snapshot-resolve-build-dependencies-hash	Use hashes of the content of the files/directories to determine invalidation	
+o	--no-snapshot-resolve-build-dependencies-hash	Negative 'snapshot-resolve-build-dependencies-hash' option	
+o	--snapshot-resolve-build-dependencies-timestamp	Use timestamps of the files/directories to determine invalidation	
+o	--no-snapshot-resolve-build-dependencies-timestamp	Negative 'snapshot-resolve-build-dependencies-timestamp' option	
+o	--stats	It instructs webpack on how to treat the stats e.g. verbose	V
+o	--no-stats	Disable stats output	
+o	--stats-all	Fallback value for stats options when an option is not defined (has precedence over local webpack…	
+o	--no-stats-all	Negative 'stats-all' option	
+o	--stats-assets	Add assets information	
+o	--no-stats-assets	Negative 'stats-assets' option	
+o	--stats-assets-sort	Sort the assets by that field	v
+o	--stats-assets-space	Space to display assets (groups will be collapsed to fit this space)	v
+o	--stats-built-at	Add built at time information	
+o	--no-stats-built-at	Negative 'stats-built-at' option	
+o	--stats-cached	Add information about cached (not built) modules (deprecated: use 'cachedModules' instead)	
+o	--no-stats-cached	Negative 'stats-cached' option	
+o	--stats-cached-assets	Show cached assets (setting this to `false` only shows emitted files)	
+o	--no-stats-cached-assets	Negative 'stats-cached-assets' option	
+o	--stats-cached-modules	Add information about cached (not built) modules	
+o	--no-stats-cached-modules	Negative 'stats-cached-modules' option	
+o	--stats-children	Add children information	
+o	--no-stats-children	Negative 'stats-children' option	
+o	--stats-chunk-group-auxiliary	Display auxiliary assets in chunk groups	
+o	--no-stats-chunk-group-auxiliary	Negative 'stats-chunk-group-auxiliary' option	
+o	--stats-chunk-group-children	Display children of chunk groups	
+o	--no-stats-chunk-group-children	Negative 'stats-chunk-group-children' option	
+o	--stats-chunk-group-max-assets	Limit of assets displayed in chunk groups	v
+o	--stats-chunk-groups	Display all chunk groups with the corresponding bundles	
+o	--no-stats-chunk-groups	Negative 'stats-chunk-groups' option	
+o	--stats-chunk-modules	Add built modules information to chunk information	
+o	--no-stats-chunk-modules	Negative 'stats-chunk-modules' option	
+o	--stats-chunk-modules-space	Space to display chunk modules (groups will be collapsed to fit this space, value is in number of…	v
+o	--stats-chunk-origins	Add the origins of chunks and chunk merging info	
+o	--no-stats-chunk-origins	Negative 'stats-chunk-origins' option	
+o	--stats-chunk-relations	Add information about parent, children and sibling chunks to chunk information	
+o	--no-stats-chunk-relations	Negative 'stats-chunk-relations' option	
+o	--stats-chunks	Add chunk information	
+o	--no-stats-chunks	Negative 'stats-chunks' option	
+o	--stats-chunks-sort	Sort the chunks by that field	v
+o	--stats-colors	Enables/Disables colorful output	
+o	--no-stats-colors	Negative 'stats-colors' option	
+o	--stats-colors-bold	Custom color for bold text	v
+o	--stats-colors-cyan	Custom color for cyan text	v
+o	--stats-colors-green	Custom color for green text	v
+o	--stats-colors-magenta	Custom color for magenta text	v
+o	--stats-colors-red	Custom color for red text	v
+o	--stats-colors-yellow	Custom color for yellow text	v
+o	--stats-context	Context directory for request shortening	v
+o	--stats-dependent-modules	Show chunk modules that are dependencies of other modules of the chunk	
+o	--no-stats-dependent-modules	Negative 'stats-dependent-modules' option	
+o	--stats-depth	Add module depth in module graph	
+o	--no-stats-depth	Negative 'stats-depth' option	
+o	--stats-entrypoints	Display the entry points with the corresponding bundles	V
+o	--no-stats-entrypoints	Negative 'stats-entrypoints' option	
+o	--stats-env	Add --env information	
+o	--no-stats-env	Negative 'stats-env' option	
+o	--stats-error-details	Add details to errors (like resolving log)	V
+o	--no-stats-error-details	Negative 'stats-error-details' option	
+o	--stats-error-stack	Add internal stack trace to errors	
+o	--no-stats-error-stack	Negative 'stats-error-stack' option	
+o	--stats-errors	Add errors	
+o	--no-stats-errors	Negative 'stats-errors' option	
+o	--stats-errors-count	Add errors count	
+o	--no-stats-errors-count	Negative 'stats-errors-count' option	
+o	--stats-exclude-assets	Suppress assets that match the specified filters. Filters can be Strings, RegExps or Functions	v
+o	--stats-exclude-assets-reset	Clear all items provided in 'stats.excludeAssets' configuration. Suppress assets that match the…	
+o	--stats-exclude-modules	Suppress modules that match the specified filters. Filters can be Strings, RegExps, Booleans or…	V
+o	--no-stats-exclude-modules	Negative 'stats-exclude-modules' option	
+o	--stats-exclude-modules-reset	Clear all items provided in 'stats.excludeModules' configuration. Suppress modules that match the…	
+o	--stats-group-assets-by-chunk	Group assets by how their are related to chunks	
+o	--no-stats-group-assets-by-chunk	Negative 'stats-group-assets-by-chunk' option	
+o	--stats-group-assets-by-emit-status	Group assets by their status (emitted, compared for emit or cached)	
+o	--no-stats-group-assets-by-emit-status	Negative 'stats-group-assets-by-emit-status' option	
+o	--stats-group-assets-by-extension	Group assets by their extension	
+o	--no-stats-group-assets-by-extension	Negative 'stats-group-assets-by-extension' option	
+o	--stats-group-assets-by-info	Group assets by their asset info (immutable, development, hotModuleReplacement, etc)	
+o	--no-stats-group-assets-by-info	Negative 'stats-group-assets-by-info' option	
+o	--stats-group-assets-by-path	Group assets by their path	
+o	--no-stats-group-assets-by-path	Negative 'stats-group-assets-by-path' option	
+o	--stats-group-modules-by-attributes	Group modules by their attributes (errors, warnings, assets, optional, orphan, or dependent)	
+o	--no-stats-group-modules-by-attributes	Negative 'stats-group-modules-by-attributes' option	
+o	--stats-group-modules-by-cache-status	Group modules by their status (cached or built and cacheable)	
+o	--no-stats-group-modules-by-cache-status	Negative 'stats-group-modules-by-cache-status' option	
+o	--stats-group-modules-by-extension	Group modules by their extension	
+o	--no-stats-group-modules-by-extension	Negative 'stats-group-modules-by-extension' option	
+o	--stats-group-modules-by-layer	Group modules by their layer	
+o	--no-stats-group-modules-by-layer	Negative 'stats-group-modules-by-layer' option	
+o	--stats-group-modules-by-path	Group modules by their path	
+o	--no-stats-group-modules-by-path	Negative 'stats-group-modules-by-path' option	
+o	--stats-group-modules-by-type	Group modules by their type	
+o	--no-stats-group-modules-by-type	Negative 'stats-group-modules-by-type' option	
+o	--stats-group-reasons-by-origin	Group reasons by their origin module	
+o	--no-stats-group-reasons-by-origin	Negative 'stats-group-reasons-by-origin' option	
+o	--stats-hash	Add the hash of the compilation	
+o	--no-stats-hash	Negative 'stats-hash' option	
+o	--stats-ids	Add ids	
+o	--no-stats-ids	Negative 'stats-ids' option	
+o	--stats-logging	Specify log level of logging output. Enable/disable logging output (`true`: shows normal logging…	V
+o	--no-stats-logging	Negative 'stats-logging' option	
+o	--stats-logging-debug	Enable/Disable debug logging for all loggers. Include debug logging of specified loggers (i. e…	V
+o	--no-stats-logging-debug	Negative 'stats-logging-debug' option	
+o	--stats-logging-debug-reset	Clear all items provided in 'stats.loggingDebug' configuration. Include debug logging of specified…	
+o	--stats-logging-trace	Add stack traces to logging output	
+o	--no-stats-logging-trace	Negative 'stats-logging-trace' option	
+o	--stats-module-assets	Add information about assets inside modules	
+o	--no-stats-module-assets	Negative 'stats-module-assets' option	
+o	--stats-module-trace	Add dependencies and origin of warnings/errors	
+o	--no-stats-module-trace	Negative 'stats-module-trace' option	
+o	--stats-modules	Add built modules information	
+o	--no-stats-modules	Negative 'stats-modules' option	
+o	--stats-modules-sort	Sort the modules by that field	v
+o	--stats-modules-space	Space to display modules (groups will be collapsed to fit this space, value is in number of…	v
+o	--stats-nested-modules	Add information about modules nested in other modules (like with module concatenation)	
+o	--no-stats-nested-modules	Negative 'stats-nested-modules' option	
+o	--stats-nested-modules-space	Space to display modules nested within other modules (groups will be collapsed to fit this space…	v
+o	--stats-optimization-bailout	Show reasons why optimization bailed out for modules	
+o	--no-stats-optimization-bailout	Negative 'stats-optimization-bailout' option	
+o	--stats-orphan-modules	Add information about orphan modules	
+o	--no-stats-orphan-modules	Negative 'stats-orphan-modules' option	
+o	--stats-output-path	Add output path information	
+o	--no-stats-output-path	Negative 'stats-output-path' option	
+o	--stats-performance	Add performance hint flags	
+o	--no-stats-performance	Negative 'stats-performance' option	
+o	--stats-preset	Preset for the default values	V
+o	--no-stats-preset	Negative 'stats-preset' option	
+o	--stats-provided-exports	Show exports provided by modules	
+o	--no-stats-provided-exports	Negative 'stats-provided-exports' option	
+o	--stats-public-path	Add public path information	
+o	--no-stats-public-path	Negative 'stats-public-path' option	
+o	--stats-reasons	Add information about the reasons why modules are included	
+o	--no-stats-reasons	Negative 'stats-reasons' option	
+o	--stats-reasons-space	Space to display reasons (groups will be collapsed to fit this space)	v
+o	--stats-related-assets	Add information about assets that are related to other assets (like SourceMaps for assets)	
+o	--no-stats-related-assets	Negative 'stats-related-assets' option	
+o	--stats-runtime	Add information about runtime modules (deprecated: use 'runtimeModules' instead)	
+o	--no-stats-runtime	Negative 'stats-runtime' option	
+o	--stats-runtime-modules	Add information about runtime modules	
+o	--no-stats-runtime-modules	Negative 'stats-runtime-modules' option	
+o	--stats-source	Add the source code of modules	
+o	--no-stats-source	Negative 'stats-source' option	
+o	--stats-timings	Add timing information	
+o	--no-stats-timings	Negative 'stats-timings' option	
+o	--stats-used-exports	Show exports used by modules	
+o	--no-stats-used-exports	Negative 'stats-used-exports' option	
+o	--stats-version	Add webpack version information	
+o	--no-stats-version	Negative 'stats-version' option	
+o	--stats-warnings	Add warnings	
+o	--no-stats-warnings	Negative 'stats-warnings' option	
+o	--stats-warnings-count	Add warnings count	
+o	--no-stats-warnings-count	Negative 'stats-warnings-count' option	
+o	--stats-warnings-filter	Suppress listing warnings that match the specified filters (they will still be counted). Filters…	v
+o	--stats-warnings-filter-reset	Clear all items provided in 'stats.warningsFilter' configuration. Suppress listing warnings that…	
+o	--target|-t	Sets the build target e.g. node	v
+o	--no-target	Negative 'target' option	
+o	--target-reset	Clear all items provided in 'target' configuration. Environment to build for. An array of…	
+o	--watch|-w	Watch for files changes	
+o	--no-watch	Do not watch for file changes	
+o	--watch-options-aggregate-timeout	Delay the rebuilt after the first change. Value is a time in ms	v
+o	--watch-options-follow-symlinks	Resolve symlinks and watch symlink and real file. This is usually not needed as webpack already…	
+o	--no-watch-options-follow-symlinks	Negative 'watch-options-follow-symlinks' option	
+o	--watch-options-ignored	A glob pattern for files that should be ignored from watching. Ignore some files from watching…	v
+o	--watch-options-ignored-reset	Clear all items provided in 'watchOptions.ignored' configuration. Ignore some files from watching…	
+o	--watch-options-poll	`number`: use polling with specified interval. `true`: use polling	V
+o	--no-watch-options-poll	Negative 'watch-options-poll' option	
+o	--watch-options-stdin	Stop watching when stdin stream has ended	
+o	--no-watch-options-stdin	Do not stop watching when stdin stream has ended	
+=		--cache-cache-directory
+t	folders
+=		--cache-immutable-paths
+t	folders
+=		--cache-managed-paths
+t	folders
+=		--context
+t	folders
+=		--module-generator-asset-filename
+t	filepaths
+=		--module-generator-asset-output-path
+t	folders
+=		--module-generator-asset-resource-filename
+t	filepaths
+=		--module-generator-asset-resource-output-path
+t	folders
+=		--module-parser-javascript-node-filename
+t	filepaths
+=		--module-parser-javascript-auto-node-filename
+t	filepaths
+=		--module-parser-javascript-dynamic-node-filename
+t	filepaths
+=		--module-parser-javascript-esm-node-filename
+t	filepaths
+=		--node-filename
+t	filepaths
+=		--optimization-split-chunks-filename
+t	filepaths
+=		--output-asset-module-filename
+t	filepaths,folders
+=		--output-chunk-filename
+t	filepaths
+=		--output-css-chunk-filename
+t	filepaths
+=		--output-css-filename
+t	filepaths
+=		--output-devtool-module-filename-template
+t	filepaths
+=		--output-devtool-namespace
+t	filepaths
+=		--output-filename
+t	filepaths
+=		--output-hot-update-chunk-filename
+t	filepaths,folders
+=		--output-hot-update-main-filename
+t	filepaths,folders
+=		--output-source-map-filename
+t	filepaths,folders
+=		--output-webassembly-module-filename
+t	filepaths,folders
+=		--resolve-description-files
+t	filepaths
+=		--resolve-main-files
+t	filepaths
+=		--resolve-modules
+t	folders
+=		--resolve-roots
+t	folders
+=		--resolve-loader-description-files
+t	filepaths
+=		--resolve-loader-main-files
+t	filepaths
+=		--resolve-loader-modules
+t	folders
+=		--resolve-loader-roots
+t	folders
+=		--snapshot-immutable-paths
+t	folders
+=		--snapshot-managed-paths
+t	folders
+=		--stats-context
+t	folders
+@	build
+@	configtest
+o	config-path	Path to the webpack configuration file	v
+=	configtest	config-path
+v	webpack.config	
+v	.webpack/webpack.config	
+v	.webpack/webpackfile	
+@	help
+@	info
+@	init
+@	loader
+@	plugin
+@	serve
+@	version
+@	watch

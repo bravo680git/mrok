@@ -1,0 +1,6 @@
+@	
+o	-f	If the invoked shell is csh(1), this option prevents it from reading the .cshrc file	
+o	-l	Simulate a full login. The environment is discarded except for HOME, SHELL, PATH, TERM, and USER…	
+o	-	(no letter) The same as -l	
+o	-m	Leave the environment unmodified. The invoked shell is your login shell, and no directory changes…	
+a	2	0

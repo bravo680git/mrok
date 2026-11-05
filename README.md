@@ -66,6 +66,7 @@ mrok            help
 mrok plugins    list commands that have a plugin
 mrok update     update to the latest version
 mrok uninstall  remove mrok and the block in your rc files
+mrok spec       list installed Fig specs (also: available, add <cmd>, rm <cmd>, prune)
 ```
 
 ## Configuration
@@ -94,6 +95,25 @@ Colors are numbers from the [256-color palette](https://en.wikipedia.org/wiki/AN
 
 Everything else comes from your shell's completion: folders for `cd`, files, options, etc.
 
+## Command specs (from Fig)
+
+mrok ships ~700 command specs converted from [withfig/autocomplete](https://github.com/withfig/autocomplete)
+(`docker`, `kubectl`, `go`, `cargo`, `brew`, ...): subcommands, options and their values,
+with descriptions. They are plain text files in `~/.mrok/specs/`, read with `awk` only when
+you type that command.
+
+- The first shell started after install/update deletes the specs of commands you don't
+  have, so only what you use stays on disk.
+- `mrok spec add <cmd>` downloads one later (e.g. after installing a new tool),
+  `mrok spec rm <cmd>` removes one and keeps it removed across updates.
+- Parts that need JavaScript in Fig (e.g. container names for `docker exec`) aren't
+  converted; mrok falls back to your shell's completion there. A built-in or user plugin
+  for the same command always wins over the spec.
+
+Maintainers regenerate the specs with `tools/fig/convert.mjs` (instructions at its top);
+`tools/fig/DYNAMIC.md` lists what was not converted. The specs keep Fig's MIT license,
+see `specs/LICENSE.fig`.
+
 ## Writing a plugin
 
 Put a file in `~/.config/mrok/plugins/` (any name ending in `.sh`). Example: suggest
@@ -120,7 +140,7 @@ The rules:
 - The function receives the words **before** the one being typed: `pnpm run d` calls it
   with `pnpm run`, and `MROK_CUR=d`.
 - Print one suggestion per line: `value` or `value<TAB>description`. Print everything,
-  mrok does the filtering (prefix first, then substring, case-insensitive).
+  mrok does the filtering (prefix first, then substring, then fuzzy, case-insensitive).
 - A value ending with `/` or `=` is inserted without a trailing space.
 - Return `0` to use your output (no output = no popup), `1` to fall back to the shell's
   completion.
@@ -156,4 +176,5 @@ mrok uninstall
 
 ## License
 
-MIT
+MIT. The files in `specs/` are generated from Fig's autocomplete specs, MIT licensed,
+copyright (c) 2021 Hercules Labs Inc. (Fig): see `specs/LICENSE.fig`.
