@@ -443,6 +443,15 @@ __mrok_key_cancel() {   # Ctrl-G
   fi
 }
 
+__mrok_key_esc() {      # Esc: hide the popup, otherwise keep Esc's own binding
+  if (( __mrok_visible )); then
+    __mrok_hide
+    __mrok_dyn X ''
+  else
+    __mrok_dyn X "$__mrok_esc_cmd"
+  fi
+}
+
 # A popup left on screen by Ctrl-C: the new prompt starts where it was drawn
 __mrok_precmd() {
   if (( __mrok_drawn )); then
@@ -474,6 +483,7 @@ __mrok_setup_bindings() {
   bind -x "\"${K}k\": __mrok_key_up"
   bind -x "\"${K}j\": __mrok_key_down"
   bind -x "\"${K}g\": __mrok_key_cancel"
+  bind -x "\"${K}x\": __mrok_key_esc"
   __mrok_dyn E accept-line
   __mrok_dyn T complete
   __mrok_orig '\e[A' previous-history; __mrok_up_cmd=$REPLY
@@ -481,6 +491,11 @@ __mrok_setup_bindings() {
   __mrok_dyn K "$__mrok_up_cmd"
   __mrok_dyn J "$__mrok_down_cmd"
   __mrok_dyn G abort
+  # Esc alone: vi-movement-mode in vi mode, nothing in emacs mode (it's only a prefix)
+  __mrok_orig '\e' ''
+  [[ -z $REPLY && -o vi ]] && REPLY=vi-movement-mode   # bind -p lists it as "\e\000"
+  __mrok_esc_cmd=$REPLY
+  __mrok_dyn X "$__mrok_esc_cmd"
 
   # printable characters: native insert, then update
   local code ch ks
@@ -505,6 +520,8 @@ __mrok_setup_bindings() {
   bind "\"\\e[B\": \"${K}j${K}J\""
   bind "\"\\eOB\": \"${K}j${K}J\""
   bind "\"\\C-g\": \"${K}g${K}G\""
+  # Readline tells a lone Esc from Esc-prefixed keys (arrows, Alt-x) by waiting keyseq-timeout
+  bind "\"\\e\": \"${K}x${K}X\""
 }
 
 __mrok_load_plugins

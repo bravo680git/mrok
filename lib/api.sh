@@ -109,7 +109,7 @@ mrok: as-you-type suggestion popup
   mrok version     print the version
 
 Keys:  type -> popup,  Up/Down select,  Enter/Tab accept,
-       Enter with nothing selected runs the command,  Esc (zsh) / Ctrl-G (bash) hides.
+       Enter with nothing selected runs the command,  Esc (or Ctrl-G in bash) hides.
 Write your own plugins in ~/.config/mrok/plugins/*.sh (see README).
 EOF
       ;;

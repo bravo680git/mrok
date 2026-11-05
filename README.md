@@ -54,7 +54,7 @@ Only one shell: `... | sh -s -- --zsh` or `--bash`.
 | `↑` `↓`                                                             | move the selection                                    |
 | `Enter` / `Tab`                                                     | accept the selection, then show what comes next       |
 | `Enter` with nothing selected, or when the word is already complete | run the command                                       |
-| `Esc` (zsh) / `Ctrl-G` (bash)                                       | hide the popup                                        |
+| `Esc` (or `Ctrl-G` in bash)                                         | hide the popup                                        |
 | `Tab` with the popup hidden                                         | open it                                               |
 
 When the popup is hidden, the arrow keys, Enter and Tab behave exactly as before.
