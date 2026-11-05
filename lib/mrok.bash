@@ -38,6 +38,9 @@ __mrok_top=1
 __mrok_visible=0
 __mrok_drawn=0        # rows currently drawn under the prompt
 __mrok_promptw=0
+__mrok_pline=''
+__mrok_pdone=0        # prompt measured for the current prompt
+__mrok_lastout=''     # last popup output, to skip identical redraws
 declare -gA __mrok_pcache=() __mrok_pstat=()
 
 __mrok_log() { [[ -n ${MROK_DEBUG-} ]] && printf '%s %s\n' "${EPOCHREALTIME-}" "$*" >> "$MROK_DEBUG"; }
@@ -250,12 +253,17 @@ __mrok_compute() {
 }
 
 # ---------------------------------------------------------------- drawing
+# Once per prompt (PS1 can run commands): __mrok_promptw = width of the prompt's last
+# line, __mrok_pline = that line as printed (colors kept), '' on bash 4.3.
 __mrok_prompt_width() {
+  (( __mrok_pdone )) && return
+  __mrok_pdone=1
   local p=''
   if (( BASH_VERSINFO[0] > 4 || BASH_VERSINFO[1] >= 4 )); then
     p=${PS1@P}
   fi
   p=${p##*$'\n'}
+  __mrok_pline=${p//[$'\001\002']/}
   # drop \[ \] markers (\001 \002) and what's between them, then ANSI sequences
   while [[ $p == *$'\001'*$'\002'* ]]; do
     p=${p%%$'\001'*}${p#*$'\002'}
@@ -263,6 +271,17 @@ __mrok_prompt_width() {
   local re=$'\e''\[[0-9;?]*[a-zA-Z]'
   while [[ $p =~ $re ]]; do p=${p/"${BASH_REMATCH[0]}"/}; done
   __mrok_promptw=${#p}
+}
+
+# bash clears the prompt line before running a `bind -x` handler and redraws it only
+# after the handler returns: over ssh the terminal shows the blank line in between
+# (flicker on every key). Put the line back right away; bash's redraw then writes the
+# same text over it. Only when the line fits on one screen line.
+__mrok_restore_line() {
+  __mrok_prompt_width
+  [[ -n $__mrok_pline ]] || return 0
+  (( __mrok_promptw + ${#READLINE_LINE} < ${COLUMNS:-80} )) || return 0
+  printf '%s%s\r' "$__mrok_pline" "$READLINE_LINE" > /dev/tty
 }
 
 __mrok_pad() {  # printf -v REPLY a string padded/truncated to width $2
@@ -350,7 +369,10 @@ __mrok_draw() {
     fi
   fi
   out+=$'\e8'
+  # Same popup as on screen already (typing within a word that doesn't change it)
+  [[ $out == "$__mrok_lastout" ]] && return
   printf '%s' "$out" > /dev/tty
+  __mrok_lastout=$out
   __mrok_drawn=$total
 }
 
@@ -365,8 +387,8 @@ __mrok_dyn() {  # __mrok_dyn <id> <readline-command or "">
 }
 
 __mrok_update() {   # after a character was inserted / deleted
+  __mrok_restore_line
   __mrok_compute 0 1
-  (( __mrok_visible )) && __mrok_prompt_width
   __mrok_draw
 }
 
@@ -390,6 +412,7 @@ __mrok_accept() {   # accept row $1 (1-based)
 }
 
 __mrok_key_enter() {
+  __mrok_restore_line
   if (( __mrok_visible && __mrok_sel > 0 )); then
     __mrok_parse
     if [[ -n $__mrok_cur && ${__mrok_i[__mrok_sel-1]} == "$__mrok_cur" && ${__mrok_s[__mrok_sel-1]} != / ]]; then
@@ -404,6 +427,7 @@ __mrok_key_enter() {
 }
 
 __mrok_key_tab() {
+  __mrok_restore_line
   if (( __mrok_visible )); then
     __mrok_dyn T ''
     __mrok_accept $(( __mrok_sel ? __mrok_sel : 1 ))
@@ -421,6 +445,7 @@ __mrok_key_tab() {
 }
 
 __mrok_key_up() {
+  __mrok_restore_line
   if (( __mrok_visible )); then
     (( __mrok_sel = __mrok_sel <= 1 ? ${#__mrok_c[@]} : __mrok_sel - 1 ))
     __mrok_draw
@@ -431,6 +456,7 @@ __mrok_key_up() {
 }
 
 __mrok_key_down() {
+  __mrok_restore_line
   if (( __mrok_visible )); then
     (( __mrok_sel = __mrok_sel >= ${#__mrok_c[@]} ? 1 : __mrok_sel + 1 ))
     __mrok_draw
@@ -441,6 +467,7 @@ __mrok_key_down() {
 }
 
 __mrok_key_cancel() {   # Ctrl-G
+  __mrok_restore_line
   if (( __mrok_visible )); then
     __mrok_hide
     __mrok_dyn G ''
@@ -450,6 +477,7 @@ __mrok_key_cancel() {   # Ctrl-G
 }
 
 __mrok_key_esc() {      # Esc: hide the popup, otherwise keep Esc's own binding
+  __mrok_restore_line
   if (( __mrok_visible )); then
     __mrok_hide
     __mrok_dyn X ''
@@ -467,6 +495,8 @@ __mrok_precmd() {
   __mrok_visible=0
   __mrok_sel=0
   __mrok_pcache=() __mrok_pstat=()
+  __mrok_pdone=0
+  __mrok_lastout=''
 }
 
 # ---------------------------------------------------------------- bindings
