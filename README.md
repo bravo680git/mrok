@@ -23,15 +23,6 @@ press Enter, and the next suggestions show up straight away: `cd` → sub-folder
 - **Fuzzy matching**: prefix first, then substring, then the typed letters in order (`git chp` → `cherry-pick`)
 - **Plugins are a few lines of shell**, and the same plugin works in zsh and bash
 
-### How is it different from…
-
-| | |
-| --- | --- |
-| Fig / Amazon Q / Kiro CLI | No app, no account, no macOS-only overlay: it runs inside the shell, so it also works on Linux and over ssh. |
-| inshellisense | No Node.js and no pty wrapper around your shell: your prompt, keys and tmux keep working as before. |
-| zsh-autocomplete, fzf-tab | Works in **bash** too; a compact popup under the cursor instead of a list or a Tab-triggered menu. |
-| ble.sh | Doesn't replace bash's line editor: it hooks a few keys and leaves the rest of readline alone. |
-
 ## Install
 
 ```sh
