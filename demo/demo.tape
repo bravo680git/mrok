@@ -15,33 +15,26 @@ Set Theme "Catppuccin Mocha"
 # vhs starts zsh with --no-rcs: load your rc (and with it mrok) off camera
 Hide
 Type "source ~/.zshrc && clear" Enter
-Sleep 2s
+Sleep 5s
 Show
 
-# fuzzy: chp -> cherry-pick, then branches
-Type "git chp" Sleep 1.2s
-Enter Sleep 1.2s
-Down Sleep 400ms
-Down Sleep 1s
-Ctrl+C Sleep 600ms
-
 # git checkout -> branches with their last commit
-Type "git checkout " Sleep 1.5s
+Sleep 500ms
+Type "git checkout " Sleep 400ms
 Type "fe" Sleep 1.5s
-Ctrl+C Sleep 600ms
+Enter Sleep 600ms
+Enter Sleep 600ms
 
-# docker exec -> running containers
-Type "docker ex" Sleep 1s
-Enter Sleep 1.5s
-Ctrl+C Sleep 600ms
-
-# a Fig spec: go mod -> subcommands with descriptions
-Type "go mod " Sleep 1.5s
-Type "t" Sleep 1.2s
-Ctrl+C Sleep 600ms
+# docker log -> log containers
+Type "docker lgs" Sleep 1s
+Enter Sleep 1s
+Down Sleep 400ms
+Down Sleep 400ms
+Down Sleep 400ms
+Enter Sleep 500ms
+Enter Sleep 2s
 
 # cd -> folders
 Type "cd " Sleep 1.5s
 Down Sleep 400ms
 Enter Sleep 1.5s
-Ctrl+C Sleep 1s

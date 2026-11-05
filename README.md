@@ -3,7 +3,7 @@
 **IDE-style, as-you-type suggestion popup for zsh and bash.** Pure shell script: no daemon,
 no app, no account, works in any terminal (and over ssh).
 
-<!-- ![mrok demo](demo/demo.gif)  (record with: vhs demo/demo.tape) -->
+![mrok demo](demo/demo.gif) (record with: vhs demo/demo.tape)
 
 Type, and a list shows up right under the word you're typing. Pick with the arrow keys,
 press Enter, and the next suggestions show up straight away: `cd` → sub-folders,
@@ -94,13 +94,13 @@ Colors are numbers from the [256-color palette](https://en.wikipedia.org/wiki/AN
 
 ## Built-in plugins
 
-| Commands                  | Suggests                                                                                              |
-| ------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `npm` `pnpm` `yarn` `bun` | scripts from the nearest `package.json` (with the command they run), common commands                  |
-| `git`                     | subcommands with descriptions, your git aliases, branches (with last commit), remotes, stash commands |
-| `make`                    | Makefile targets; `target: ## text` becomes the description                                           |
+| Commands                  | Suggests                                                                                                                                                          |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm` `pnpm` `yarn` `bun` | scripts from the nearest `package.json` (with the command they run), common commands                                                                              |
+| `git`                     | subcommands with descriptions, your git aliases, branches (with last commit), remotes, stash commands                                                             |
+| `make`                    | Makefile targets; `target: ## text` becomes the description                                                                                                       |
 | `docker` `docker-compose` | container names (running / stopped / all, by subcommand) with status and image, images, networks, volumes, contexts, compose services; the rest from the Fig spec |
-| `mrok`                    | its own commands; spec names for `mrok spec add` / `rm`                                               |
+| `mrok`                    | its own commands; spec names for `mrok spec add` / `rm`                                                                                                           |
 
 Everything else comes from your shell's completion: folders for `cd`, files, options, etc.
 
