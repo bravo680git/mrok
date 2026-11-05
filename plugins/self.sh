@@ -1,4 +1,4 @@
-# mrok: its own commands, plus spec names for `mrok spec add/rm`.
+# mrok (the command itself): its own commands, plus spec names for `mrok spec add/rm`.
 mrok_register __mrok_p_mrok mrok
 
 __mrok_p_mrok() {

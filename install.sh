@@ -81,7 +81,7 @@ install_files() {
   say "downloading $URL"
   fetch "$URL" "$tmp/mrok.tar.gz" || die "download failed"
   tar -xzf "$tmp/mrok.tar.gz" -C "$tmp" || die "can't extract the archive"
-  src=$(find "$tmp" -name mrok.sh -type f | head -1)
+  src=$(find "$tmp" -maxdepth 2 -name mrok.sh -type f | head -1)
   [ -n "$src" ] || die "mrok.sh not found in the archive"
   copy_tree "$(dirname "$src")"
 }
