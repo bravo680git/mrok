@@ -1,9 +1,14 @@
 # mrok
 
-As-you-type suggestion popup for **zsh** and **bash**. Type, and a list shows up right
-under the word you're typing. Pick with the arrow keys, press Enter, and the next
-suggestions show up straight away: `cd` → sub-folders, `git` → `checkout` → branches,
-`pnpm` → the scripts in your `package.json`.
+**IDE-style, as-you-type suggestion popup for zsh and bash.** Pure shell script: no daemon,
+no app, no account, works in any terminal (and over ssh).
+
+<!-- ![mrok demo](demo/demo.gif)  (record with: vhs demo/demo.tape) -->
+
+Type, and a list shows up right under the word you're typing. Pick with the arrow keys,
+press Enter, and the next suggestions show up straight away: `cd` → sub-folders,
+`git checkout` → branches with their last commit, `docker exec` → running containers,
+`pnpm run` → the scripts in your `package.json`.
 
 ```
 ~/proj $ git checkout fe
@@ -11,10 +16,21 @@ suggestions show up straight away: `cd` → sub-folders, `git` → `checkout` �
                       feature/search  search by name
 ```
 
-- Works inside any terminal: Terminal.app, iTerm2, WezTerm, Ghostty, VS Code, Linux terminals
-- Pure shell script, nothing to compile, no account, no network calls
-- Uses your shell's own completion (zsh compsys / bash-completion), plus plugins
-- Plugins are a few lines of shell, and the same plugin works in zsh and bash
+- **Any terminal**: Terminal.app, iTerm2, WezTerm, Ghostty, Kitty, VS Code, Linux terminals, tmux, ssh
+- **Pure shell**: a few files sourced from your rc file, nothing to compile, nothing running in the background
+- **Your shell's own completion** (zsh compsys / bash-completion) plus ~690 command specs
+  converted from [Fig](https://github.com/withfig/autocomplete) and a handful of plugins
+- **Fuzzy matching**: prefix first, then substring, then the typed letters in order (`git chp` → `cherry-pick`)
+- **Plugins are a few lines of shell**, and the same plugin works in zsh and bash
+
+### How is it different from…
+
+| | |
+| --- | --- |
+| Fig / Amazon Q / Kiro CLI | No app, no account, no macOS-only overlay: it runs inside the shell, so it also works on Linux and over ssh. |
+| inshellisense | No Node.js and no pty wrapper around your shell: your prompt, keys and tmux keep working as before. |
+| zsh-autocomplete, fzf-tab | Works in **bash** too; a compact popup under the cursor instead of a list or a Tab-triggered menu. |
+| ble.sh | Doesn't replace bash's line editor: it hooks a few keys and leaves the rest of readline alone. |
 
 ## Install
 
@@ -39,8 +55,8 @@ Then open a new terminal. The installer copies mrok to `~/.mrok` and adds one bl
 
 Keep that block at the **end** of the file (after oh-my-zsh / bash-completion are loaded).
 
-Requirements: zsh 5.3+, or bash 4.3+ (Linux). macOS ships bash 3.2, so on a Mac use zsh
-(the default shell) or `brew install bash`.
+Requirements: zsh 5.3+, or bash 4.3+. macOS still ships bash 3.2 (2007, the last GPLv2
+version), so on a Mac use zsh (the default shell) or `brew install bash`.
 
 From a clone: `git clone https://github.com/bravo680git/mrok && sh mrok/install.sh --local`
 
@@ -99,14 +115,15 @@ Everything else comes from your shell's completion: folders for `cd`, files, opt
 
 ## Command specs (from Fig)
 
-mrok ships ~700 command specs converted from [withfig/autocomplete](https://github.com/withfig/autocomplete)
+mrok ships ~690 command specs converted from [withfig/autocomplete](https://github.com/withfig/autocomplete)
 (`docker`, `kubectl`, `go`, `cargo`, `brew`, ...): subcommands, options and their values,
 with descriptions. They are plain text files in `~/.mrok/specs/`, read with `awk` only when
 you type that command.
 
 - Every 3 days (`MROK_SPEC_REFRESH_DAYS`), a new shell refreshes the specs in the
   background: it deletes the specs of commands you don't have and downloads the ones of
-  commands you installed since. So only what you use stays on disk. `mrok spec refresh`
+  commands you installed since (from this GitHub repo; that's mrok's only network
+  access, besides `mrok update`). So only what you use stays on disk. `mrok spec refresh`
   does it right away.
 - `mrok spec add <cmd>` downloads one later (e.g. after installing a new tool),
   `mrok spec rm <cmd>` removes one and keeps it removed across updates.
@@ -120,19 +137,20 @@ see `specs/LICENSE`.
 
 ## Writing a plugin
 
-Put a file in `~/.config/mrok/plugins/` (any name ending in `.sh`). Example: suggest
-`docker compose` services.
+Put a file in `~/.config/mrok/plugins/` (any name ending in `.sh`). Example: suggest the
+recipes of a [`just`](https://github.com/casey/just) file.
 
 ```sh
-# ~/.config/mrok/plugins/compose.sh
-mrok_register my_compose docker-compose
+# ~/.config/mrok/plugins/just.sh
+mrok_register my_just just
 
-my_compose() {
+my_just() {
   # "$@" = words typed before the current one ($1 is the command)
   # $MROK_CUR = the word being typed
-  [ $# -eq 2 ] && [ "$2" = logs ] || return 1    # 1 = not mine, use normal completion
-  docker-compose config --services 2>/dev/null | while read -r s; do
-    printf '%s\t%s\n' "$s" "service"             # value<TAB>description
+  [ $# -eq 1 ] || return 1                       # 1 = not mine, use normal completion
+  case $MROK_CUR in -*) return 1 ;; esac
+  just --summary 2>/dev/null | tr ' ' '\n' | while read -r r; do
+    printf '%s\t%s\n' "$r" recipe              # value<TAB>description
   done
   return 0                                       # 0 = use what I printed
 }
@@ -154,8 +172,10 @@ The rules:
   (`[ ]`, `case`, `$#`, no arrays).
 
 Helpers you can use: `mrok_find_up <file>` (nearest file walking up from `$PWD`),
-`mrok_pkg_scripts`, `mrok_git_branches`. A plugin with the same command name as a built-in
-one replaces it.
+`mrok_pkg_scripts`, `mrok_git_branches`, and for a command that has a spec,
+`__mrok_spec_where <cmd> "$@"` (which subcommand / argument is being typed, see
+`plugins/docker.sh`) and `__mrok_spec <cmd> "$@"` (the spec's own suggestions). A plugin
+with the same command name as a built-in one replaces it.
 
 ## How it works
 
@@ -171,12 +191,19 @@ one replaces it.
 - The popup is drawn with text, under the command line, not as a floating window.
 - bash: emacs editing mode only; non-ASCII typing doesn't refresh the popup.
 - After `Ctrl-C` a few blank lines can be left where the popup was.
+- bash: after `Ctrl-L` the popup comes back only once the suggestions change.
 
 ## Uninstall
 
 ```sh
 mrok uninstall
 ```
+
+## Contributing
+
+Issues and PRs welcome, especially plugins for commands you use every day. Set
+`MROK_DEBUG=/tmp/mrok.log` to see what mrok computes on each key. The demo GIF is
+recorded with [vhs](https://github.com/charmbracelet/vhs): `vhs demo/demo.tape`.
 
 ## License
 

@@ -1,7 +1,7 @@
 # mrok shared code: plugin API, helpers for plugins, and the `mrok` command.
 # Sourced by both lib/mrok.zsh and lib/mrok.bash, so keep it bash/zsh compatible.
 
-MROK_VERSION=0.1.0
+MROK_VERSION=0.2.0
 
 typeset -gA __mrok_plugins 2>/dev/null
 
