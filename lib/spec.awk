@@ -5,6 +5,8 @@
 # Prints "value<TAB>description" lines, plus control lines:
 #   !native          let the shell complete this position (files, ...)
 #   !gen<TAB>cmd     run cmd, one suggestion per output line
+# With MROK_WHERE=1 it prints one line instead: <subcommand path><TAB><argument index,
+# 0 = an option's value><TAB><that option>
 # POSIX awk only (macOS awk, mawk, gawk).
 
 # Only blocks whose path is made of typed words are kept (big specs stay fast). Parents
@@ -111,7 +113,7 @@ END {
     if (!ddash && x ~ /^-./) {
       eq = index(x, "=")
       fl = findopt(node, eq ? substr(x, 1, eq - 1) : x)
-      if (fl ~ /v/ && !eq && fl !~ /=/) pend = "O" SUBSEP fnode SUBSEP fcanon
+      if (fl ~ /v/ && !eq && fl !~ /=/) { pend = "O" SUBSEP fnode SUBSEP fcanon; pendopt = fcanon }
       continue
     }
     if (pos == 0 && (node SUBSEP x) in sub_) {
@@ -120,6 +122,12 @@ END {
       continue
     }
     pos++
+  }
+
+  # MROK_WHERE=1: only say where the cursor is, for plugins (see __mrok_spec_where)
+  if (ENVIRON["MROK_WHERE"] != "") {
+    print node "\t" (pend != "" ? 0 : pos + 1) "\t" (pend != "" ? pendopt : "")
+    exit
   }
 
   # Value of an option given as the previous word

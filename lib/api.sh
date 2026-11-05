@@ -103,6 +103,23 @@ EOF
   [ "$any" = 1 ] || [ "$nat" = 0 ]
 }
 
+# For plugins that add dynamic values on top of a spec: where is the cursor?
+#   __mrok_spec_where <spec> <words before the current one, without the command>
+# Sets MROK_PATH (subcommand path, e.g. "container exec"), MROK_ARG (1-based index of
+# the positional argument being typed, 0 when it's an option's value) and MROK_OPT (that
+# option). Returns 1 when there's no such spec.
+__mrok_spec_where() {
+  local f="$MROK_HOME/specs/$1.spec" IFS out
+  MROK_PATH='' MROK_ARG=0 MROK_OPT=''
+  [ -f "$f" ] || return 1
+  shift
+  IFS=$(printf '\037')
+  out=$(MROK_WHERE=1 MROK_W="$*" MROK_CUR="$MROK_CUR" awk -f "$MROK_HOME/lib/spec.awk" "$f" 2>/dev/null)
+  MROK_PATH=${out%%	*}; out=${out#*	}
+  MROK_ARG=${out%%	*}; MROK_OPT=${out#*	}
+  return 0
+}
+
 # Seconds since the epoch, without starting a process.
 __mrok_now() {
   if [ -n "${ZSH_VERSION-}" ]; then
@@ -156,6 +173,12 @@ __mrok_spec_index() {
   return 1
 }
 
+# Is the spec of command $1 useful here? (docker-compose's also serves `docker compose`)
+__mrok_spec_wanted() {
+  command -v "$1" >/dev/null 2>&1 && return 0
+  case $1 in docker-compose) command -v docker >/dev/null 2>&1 ;; *) return 1 ;; esac
+}
+
 # Keep the specs in line with what's installed: delete the ones of commands that are gone
 # (or that the user removed with `mrok spec rm`), download the ones of new commands.
 # $1 = 1: print what happened.
@@ -175,7 +198,7 @@ $(cat "$__mrok_spec_off")
     case $off in *"
 $c
 "*) rm -f "$f"; nrm=$((nrm + 1)); continue ;; esac
-    command -v "$c" >/dev/null 2>&1 || { rm -f "$f"; nrm=$((nrm + 1)); }
+    __mrok_spec_wanted "$c" || { rm -f "$f"; nrm=$((nrm + 1)); }
   done
   if [ -f "$dir/index" ]; then
     local new=''
@@ -184,7 +207,7 @@ $c
       case $off in *"
 $c
 "*) continue ;; esac
-      command -v "$c" >/dev/null 2>&1 && new="$new $c"
+      __mrok_spec_wanted "$c" && new="$new $c"
     done < "$dir/index"
     [ -n "$new" ] && __mrok_spec_fetch_many $new
     for c in $new; do
