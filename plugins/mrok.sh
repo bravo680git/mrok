@@ -20,7 +20,7 @@ __mrok_p_mrok() {
       available 'every spec you can add' \
       add 'download specs from GitHub' \
       rm 'remove specs (kept removed across updates)' \
-      prune 'remove specs of commands that are not installed'
+      refresh 'drop specs of removed commands, fetch new ones'
     return 0
   fi
   local dir="$MROK_HOME/specs" f c

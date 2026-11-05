@@ -103,27 +103,80 @@ EOF
   [ "$any" = 1 ] || [ "$nat" = 0 ]
 }
 
-# Delete the specs of commands that aren't installed (or that the user removed).
-# Runs once, at the first shell start after an install/update, when PATH is complete.
-__mrok_spec_prune() {
-  local f c dir="$MROK_HOME/specs"
+# Seconds since the epoch, without starting a process.
+__mrok_now() {
+  if [ -n "${ZSH_VERSION-}" ]; then
+    zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+    REPLY=$EPOCHSECONDS
+  else
+    printf -v REPLY '%(%s)T' -1
+  fi
+}
+
+# Download specs/<cmd>.spec from GitHub.
+__mrok_spec_fetch() {
+  local dir="$MROK_HOME/specs" f
+  local url="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/specs/$1.spec"
+  f="$dir/$1.spec.tmp"
+  mkdir -p "$dir"
+  if command -v curl >/dev/null 2>&1; then curl -fsSL "$url" -o "$f"
+  elif command -v wget >/dev/null 2>&1; then wget -qO "$f" "$url"
+  else return 1
+  fi && mv "$f" "$dir/$1.spec" && return 0
+  rm -f "$f"
+  return 1
+}
+
+# Keep the specs in line with what's installed: delete the ones of commands that are gone
+# (or that the user removed with `mrok spec rm`), download the ones of new commands.
+# $1 = 1: print what happened.
+__mrok_spec_refresh() {
+  local dir="$MROK_HOME/specs" f c d off='' nrm=0 nadd=0
   [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
-  [ -d "$dir" ] && [ ! -e "$dir/.pruned" ] && [ ! -e "$MROK_HOME/.git" ] || return 0
+  [ -d "$dir" ] || return 0
+  __mrok_now; printf '%s\n' "$REPLY" > "$dir/.refreshed"
+  [ -f "$__mrok_spec_off" ] && off="
+$(cat "$__mrok_spec_off")
+"
   for f in "$dir"/*.spec; do
     [ -f "$f" ] || continue
     c=${f##*/}; c=${c%.spec}
-    if ! command -v "$c" >/dev/null 2>&1 || { [ -f "$__mrok_spec_off" ] && grep -qxF "$c" "$__mrok_spec_off"; }; then
-      rm -f "$f"
-    fi
+    case $off in *"
+$c
+"*) rm -f "$f"; nrm=$((nrm + 1)); continue ;; esac
+    command -v "$c" >/dev/null 2>&1 || { rm -f "$f"; nrm=$((nrm + 1)); }
   done
-  : > "$dir/.pruned"
+  if [ -f "$dir/index" ]; then
+    while IFS='	' read -r c d; do
+      [ -n "$c" ] && [ ! -f "$dir/$c.spec" ] || continue
+      case $off in *"
+$c
+"*) continue ;; esac
+      command -v "$c" >/dev/null 2>&1 || continue
+      if __mrok_spec_fetch "$c"; then
+        nadd=$((nadd + 1)); [ "${1-0}" = 1 ] && echo "mrok: added $c"
+      fi
+    done < "$dir/index"
+  fi
+  [ "${1-0}" = 1 ] && echo "mrok: removed $nrm, added $nadd specs"
+  return 0
+}
+
+# At shell start: refresh in the background every MROK_SPEC_REFRESH_DAYS days (default 3).
+__mrok_spec_auto_refresh() {
+  local dir="$MROK_HOME/specs" last=0
+  [ -d "$dir" ] && [ ! -e "$MROK_HOME/.git" ] || return 0
+  [ -f "$dir/.refreshed" ] && read -r last < "$dir/.refreshed"
+  __mrok_now
+  [ $((REPLY - ${last:-0})) -ge $(( ${MROK_SPEC_REFRESH_DAYS:-3} * 86400 )) ] || return 0
+  ( __mrok_spec_refresh >/dev/null 2>&1 & )
 }
 
 __mrok_load_specs() {
   local f c
   [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
   [ -d "$MROK_HOME/specs" ] || return 0
-  __mrok_spec_prune
+  __mrok_spec_auto_refresh
   for f in "$MROK_HOME/specs"/*.spec; do
     [ -f "$f" ] || continue
     c=${f##*/}; c=${c%.spec}
@@ -132,24 +185,18 @@ __mrok_load_specs() {
 }
 
 __mrok_spec_cmd() {
-  local dir="$MROK_HOME/specs" c f url n
+  local dir="$MROK_HOME/specs" c f n
   [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
   case ${1-} in
     add)
       shift
       [ $# -gt 0 ] || { echo "usage: mrok spec add <command>..." >&2; return 2; }
-      mkdir -p "$dir"
+      command -v curl >/dev/null 2>&1 || command -v wget >/dev/null 2>&1 || { echo "mrok: need curl or wget" >&2; return 1; }
       for c in "$@"; do
         if [ -f "$dir/index" ] && ! cut -f1 "$dir/index" | grep -qxF "$c"; then
           echo "mrok: no spec for '$c' (see: mrok spec available)" >&2; continue
         fi
-        url="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/specs/$c.spec"
-        f="$dir/$c.spec.tmp"
-        if command -v curl >/dev/null 2>&1; then curl -fsSL "$url" -o "$f"
-        elif command -v wget >/dev/null 2>&1; then wget -qO "$f" "$url"
-        else echo "mrok: need curl or wget" >&2; return 1
-        fi || { rm -f "$f"; echo "mrok: download failed: $url" >&2; continue; }
-        mv "$f" "$dir/$c.spec"
+        __mrok_spec_fetch "$c" || { echo "mrok: download failed: $c" >&2; continue; }
         [ -f "$__mrok_spec_off" ] && { grep -vxF "$c" "$__mrok_spec_off" > "$__mrok_spec_off.tmp"; mv "$__mrok_spec_off.tmp" "$__mrok_spec_off"; }
         [ -n "${__mrok_plugins[$c]-}" ] || __mrok_plugins[$c]=__mrok_spec
         echo "mrok: added $c"
@@ -173,10 +220,11 @@ __mrok_spec_cmd() {
       [ "$n" -gt 0 ] || echo "no specs installed (mrok spec available / mrok spec add <command>)" ;;
     available)
       [ -f "$dir/index" ] && cut -f1 "$dir/index" | column 2>/dev/null || cut -f1 "$dir/index" ;;
-    prune)
-      rm -f "$dir/.pruned"; __mrok_spec_prune; echo "mrok: kept $(ls "$dir" | grep -c '\.spec$') specs" ;;
+    refresh)
+      __mrok_spec_refresh 1
+      __mrok_load_specs ;;
     *)
-      echo "usage: mrok spec [list|available|add <cmd>...|rm <cmd>...|prune]" >&2; return 2 ;;
+      echo "usage: mrok spec [list|available|add <cmd>...|rm <cmd>...|refresh]" >&2; return 2 ;;
   esac
 }
 
@@ -225,7 +273,7 @@ mrok() {
 mrok: as-you-type suggestion popup
 
   mrok plugins     list commands that have a suggestion plugin
-  mrok spec        list the commands with a Fig spec (also: available, add, rm, prune)
+  mrok spec        list the commands with a Fig spec (also: available, add, rm, refresh)
   mrok update      update to the latest version
   mrok uninstall   remove mrok and its line in your shell rc file
   mrok version     print the version

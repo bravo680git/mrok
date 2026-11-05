@@ -66,7 +66,7 @@ mrok            help
 mrok plugins    list commands that have a plugin
 mrok update     update to the latest version
 mrok uninstall  remove mrok and the block in your rc files
-mrok spec       list installed Fig specs (also: available, add <cmd>, rm <cmd>, prune)
+mrok spec       list installed Fig specs (also: available, add <cmd>, rm <cmd>, refresh)
 ```
 
 ## Configuration
@@ -103,8 +103,10 @@ mrok ships ~700 command specs converted from [withfig/autocomplete](https://gith
 with descriptions. They are plain text files in `~/.mrok/specs/`, read with `awk` only when
 you type that command.
 
-- The first shell started after install/update deletes the specs of commands you don't
-  have, so only what you use stays on disk.
+- Every 3 days (`MROK_SPEC_REFRESH_DAYS`), a new shell refreshes the specs in the
+  background: it deletes the specs of commands you don't have and downloads the ones of
+  commands you installed since. So only what you use stays on disk. `mrok spec refresh`
+  does it right away.
 - `mrok spec add <cmd>` downloads one later (e.g. after installing a new tool),
   `mrok spec rm <cmd>` removes one and keeps it removed across updates.
 - Parts that need JavaScript in Fig (e.g. container names for `docker exec`) aren't
