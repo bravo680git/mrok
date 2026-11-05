@@ -79,7 +79,7 @@ mrok_git_branches() {
 
 # ---------------------------------------------------------------- Fig specs
 # specs/<cmd>.spec are converted from github.com/withfig/autocomplete (MIT, see
-# specs/LICENSE.fig). __mrok_spec is the plugin for every command that has one.
+# specs/LICENSE). __mrok_spec is the plugin for every command that has one.
 
 __mrok_spec_off="${XDG_CONFIG_HOME:-$HOME/.config}/mrok/specs.off"
 

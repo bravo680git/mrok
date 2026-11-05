@@ -113,7 +113,7 @@ you type that command.
 
 Maintainers regenerate the specs with `tools/fig/convert.mjs` (instructions at its top);
 `tools/fig/DYNAMIC.md` lists what was not converted. The specs keep Fig's MIT license,
-see `specs/LICENSE.fig`.
+see `specs/LICENSE`.
 
 ## Writing a plugin
 
@@ -178,4 +178,4 @@ mrok uninstall
 ## License
 
 MIT. The files in `specs/` are generated from Fig's autocomplete specs, MIT licensed,
-copyright (c) 2021 Hercules Labs Inc. (Fig): see `specs/LICENSE.fig`.
+copyright (c) 2021 Hercules Labs Inc. (Fig): see `specs/LICENSE`.
