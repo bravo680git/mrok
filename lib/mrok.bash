@@ -192,26 +192,32 @@ __mrok_from_commands() {
   done < <(compgen -c -- "$cur" 2>/dev/null | awk -v w="$cur" '!seen[$0]++ { printf "%d %05d %s\n", ($0 != w), length($0), $0 }' | sort | head -300 | cut -d' ' -f3-)
 }
 
-# Keep prefix matches when there are any, otherwise substring matches; dedupe.
+# Keep the best tier that has any match: prefix > substring > fuzzy (the typed
+# characters in order, e.g. "chp" -> cherry-pick); dedupe.
 __mrok_filter() {
-  local cur=${__mrok_cur#[\"\']} lw i hasprefix=0
+  local cur=${__mrok_cur#[\"\']} lw i tier=0 ch q fz='*'
   lw=${cur,,}
   local -a c=() ii=() ss=() d=()
   local -A seen=()
   if [[ -n $lw ]]; then
-    for (( i = 0; i < ${#__mrok_c[@]}; i++ )); do
-      [[ ${__mrok_i[i],,} == "$lw"* || ${__mrok_c[i],,} == "$lw"* ]] && { hasprefix=1; break; }
+    for (( i = 0; i < ${#lw}; i++ )); do
+      ch=${lw:i:1}; printf -v q '%q' "$ch"; fz+="$q*"
     done
+    for (( i = 0; i < ${#__mrok_c[@]}; i++ )); do
+      if [[ ${__mrok_i[i],,} == "$lw"* || ${__mrok_c[i],,} == "$lw"* ]]; then tier=1; break
+      elif [[ ${__mrok_c[i],,} == *"$lw"* ]]; then tier=2
+      elif (( tier != 2 )) && [[ ${__mrok_c[i],,} == $fz ]]; then tier=3
+      fi
+    done
+    (( tier )) || { __mrok_c=() __mrok_i=() __mrok_s=() __mrok_d=(); return; }
   fi
   for (( i = 0; i < ${#__mrok_c[@]}; i++ )); do
     [[ -n ${seen[${__mrok_i[i]}]+x} ]] && continue
-    if [[ -n $lw ]]; then
-      if (( hasprefix )); then
-        [[ ${__mrok_i[i],,} == "$lw"* || ${__mrok_c[i],,} == "$lw"* ]] || continue
-      else
-        [[ ${__mrok_c[i],,} == *"$lw"* ]] || continue
-      fi
-    fi
+    case $tier in
+      1) [[ ${__mrok_i[i],,} == "$lw"* || ${__mrok_c[i],,} == "$lw"* ]] || continue ;;
+      2) [[ ${__mrok_c[i],,} == *"$lw"* ]] || continue ;;
+      3) [[ ${__mrok_c[i],,} == $fz ]] || continue ;;
+    esac
     seen[${__mrok_i[i]}]=1
     c+=( "${__mrok_c[i]}" ); ii+=( "${__mrok_i[i]}" ); ss+=( "${__mrok_s[i]}" ); d+=( "${__mrok_d[i]}" )
     (( ${#c[@]} >= 300 )) && break

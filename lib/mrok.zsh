@@ -28,11 +28,12 @@ typeset -g __MROK_ST_SELDESC="bg=$MROK_SEL_BG,fg=$MROK_SEL_DESC_FG"
 typeset -g __MROK_ST_FOOT="bg=$MROK_BG,fg=$MROK_FOOT_FG"
 
 # Case-insensitive matching for mrok's own completion calls only; fall back to
-# partial-word and substring matching when nothing matches the prefix.
+# partial-word, substring, then fuzzy (chars in order) matching when nothing matches.
 zstyle ':completion:__mrok-complete:*' matcher-list \
   'm:{a-z}={A-Za-z}' \
   'm:{a-z}={A-Za-z} r:|[._-]=* r:|=*' \
-  'm:{a-z}={A-Za-z} l:|=* r:|=*'
+  'm:{a-z}={A-Za-z} l:|=* r:|=*' \
+  'm:{a-z}={A-Za-z} r:|?=**'
 
 # ---------------------------------------------------------------- state
 # Each suggestion: __mrok_c display text, __mrok_i text that replaces the current word,
@@ -256,10 +257,18 @@ __mrok_compute() {
   local -a c ii ss d
   local -A seen
   local i x desc
-  # Keep only prefix matches when there are any; substring matches are a fallback
-  local lw=${(L)word#[\"\']} hasprefix=0
+  # Keep the best tier that has any match: prefix > substring > fuzzy (the typed
+  # characters in order, e.g. "chp" -> cherry-pick). Native completion is already
+  # filtered by zsh's matcher-list, so tiers 2/3 only narrow plugin output.
+  local lw=${(L)word#[\"\']} tier=0 fz='*' ch
   if [[ -n $lw ]]; then
-    for x in "${__mrok_i[@]}"; do [[ ${(L)x} == ${lw}* ]] && { hasprefix=1; break }; done
+    for ch in ${(s::)lw}; do fz+="${(b)ch}*"; done
+    for (( i = 1; i <= $#__mrok_c; i++ )); do
+      if [[ ${(L)__mrok_i[i]} == ${lw}* ]]; then tier=1; break
+      elif (( plugin )) && [[ ${(L)__mrok_c[i]} == *${lw}* ]]; then tier=2
+      elif (( plugin && tier != 2 )) && [[ ${(L)__mrok_c[i]} == $~fz ]]; then tier=3
+      fi
+    done
   fi
   for (( i = 1; i <= $#__mrok_c; i++ )); do
     x=${__mrok_c[i]}
@@ -273,11 +282,12 @@ __mrok_compute() {
       [[ -n $desc && -z ${d[${seen[${__mrok_i[i]}]}]} ]] && d[${seen[${__mrok_i[i]}]}]=$desc
       continue
     fi
-    if (( hasprefix )); then
-      [[ ${(L)__mrok_i[i]} != ${lw}* ]] && continue
-    elif (( plugin )) && [[ -n $lw ]]; then
-      [[ ${(L)x} != *${lw}* ]] && continue
-    fi
+    case $tier in
+      1) [[ ${(L)__mrok_i[i]} == ${lw}* ]] || continue ;;
+      2) [[ ${(L)x} == *${lw}* ]] || continue ;;
+      3) [[ ${(L)x} == $~fz ]] || continue ;;
+      0) (( plugin )) && [[ -n $lw ]] && continue ;;
+    esac
     # Command position: hide internal functions (_xxx, .xxx) and parameters
     if (( cmdpos )); then
       [[ $x == [_.]* && $word != [_.]* ]] && continue
