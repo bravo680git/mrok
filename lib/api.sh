@@ -192,11 +192,26 @@ __mrok_load_plugins() {
   done
 }
 
+# Run the latest installer, not the installed one: a new version may install new files.
+__mrok_update() {
+  local tmp url="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/install.sh"
+  tmp=$(mktemp 2>/dev/null || mktemp -t mrok) || return 1
+  if { command -v curl >/dev/null 2>&1 && curl -fsSL "$url" -o "$tmp"; } ||
+     { command -v wget >/dev/null 2>&1 && wget -qO "$tmp" "$url"; }; then
+    sh "$tmp" --update
+  else
+    sh "$MROK_HOME/install.sh" --update
+  fi
+  local rc=$?
+  rm -f "$tmp"
+  return $rc
+}
+
 # ---------------------------------------------------------------- `mrok` command
 mrok() {
   case ${1-help} in
     update)
-      sh "$MROK_HOME/install.sh" --update && echo "mrok: updated, open a new shell to use it" ;;
+      __mrok_update && echo "mrok: updated, open a new shell to use it" ;;
     uninstall)
       sh "$MROK_HOME/install.sh" --uninstall ;;
     plugins)
