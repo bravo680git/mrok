@@ -92,6 +92,7 @@ Colors are numbers from the [256-color palette](https://en.wikipedia.org/wiki/AN
 | `npm` `pnpm` `yarn` `bun` | scripts from the nearest `package.json` (with the command they run), common commands                  |
 | `git`                     | subcommands with descriptions, your git aliases, branches (with last commit), remotes, stash commands |
 | `make`                    | Makefile targets; `target: ## text` becomes the description                                           |
+| `mrok`                    | its own commands; spec names for `mrok spec add` / `rm`                                               |
 
 Everything else comes from your shell's completion: folders for `cd`, files, options, etc.
 
