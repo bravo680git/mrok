@@ -42,7 +42,9 @@ typeset -ga __mrok_c __mrok_i __mrok_s __mrok_d
 typeset -gi __mrok_sel=0 __mrok_top=1 __mrok_visible=0 __mrok_busy=0 __mrok_promptw=0
 typeset -g  __mrok_last=''
 typeset -gA __mrok_orig_keys __mrok_pcache __mrok_pstat
-typeset -ga __MROK_KEYS=( '^[[A' '^[OA' '^[[B' '^[OB' '^M' '^[' )
+# Keys bound while the popup is shown. Esc then Enter typed within KEYTIMEOUT arrives as
+# one key, ^[^M, which zsh binds to inserting a newline: make it "hide and run" instead.
+typeset -ga __MROK_KEYS=( '^[[A' '^[OA' '^[[B' '^[OB' '^M' '^[' '^[^M' '^[^J' )
 
 __mrok_log() { [[ -n $MROK_DEBUG ]] && print -r -- "${EPOCHREALTIME:-} $*" >> $MROK_DEBUG }
 
@@ -190,6 +192,7 @@ __mrok_bind() {
     bindkey '^[[B' mrok-down; bindkey '^[OB' mrok-down
     bindkey '^M'   mrok-enter
     bindkey '^['   mrok-esc
+    bindkey '^[^M' mrok-run; bindkey '^[^J' mrok-run
   else
     for k in $__MROK_KEYS; do
       if [[ -z ${__mrok_orig_keys[$k]} || ${__mrok_orig_keys[$k]} == undefined-key ]]; then
@@ -479,6 +482,7 @@ zle -N mrok-up __mrok_up
 zle -N mrok-down __mrok_down
 zle -N mrok-esc __mrok_esc
 zle -N mrok-enter __mrok_enter
+zle -N mrok-run __mrok_run
 zle -N mrok-tab __mrok_tab
 
 # ---------------------------------------------------------------- hooks
