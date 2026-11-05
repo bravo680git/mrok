@@ -113,17 +113,46 @@ __mrok_now() {
   fi
 }
 
-# Download specs/<cmd>.spec from GitHub.
-__mrok_spec_fetch() {
+# Download specs/<file> from GitHub (a spec, or the index).
+__mrok_spec_get() {
   local dir="$MROK_HOME/specs" f
-  local url="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/specs/$1.spec"
-  f="$dir/$1.spec.tmp"
+  local url="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/specs/$1"
+  f="$dir/$1.tmp"
   mkdir -p "$dir"
   if command -v curl >/dev/null 2>&1; then curl -fsSL "$url" -o "$f"
   elif command -v wget >/dev/null 2>&1; then wget -qO "$f" "$url"
   else return 1
-  fi && mv "$f" "$dir/$1.spec" && return 0
+  fi && mv "$f" "$dir/$1" && return 0
   rm -f "$f"
+  return 1
+}
+__mrok_spec_fetch() { __mrok_spec_get "$1.spec"; }
+
+# Download several specs: one curl run, parallel when curl supports it.
+__mrok_spec_fetch_many() {
+  local dir="$MROK_HOME/specs" c
+  local base="https://raw.githubusercontent.com/${MROK_REPO:-bravo680git/mrok}/${MROK_REF:-main}/specs"
+  local n=$# par=''
+  [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob shwordsplit
+  if command -v curl >/dev/null 2>&1; then
+    for c in "$@"; do set -- "$@" -o "$dir/$c.spec.tmp" "$base/$c.spec"; done
+    shift "$n"
+    curl -Z -V >/dev/null 2>&1 && par='-Z --parallel-max 8'
+    curl -fsSL $par "$@" 2>/dev/null
+    for c in "$dir"/*.spec.tmp; do
+      [ -s "$c" ] && mv "$c" "${c%.tmp}" || rm -f "$c"
+    done
+  else
+    for c in "$@"; do __mrok_spec_fetch "$c"; done
+  fi
+  return 0
+}
+
+# Make sure specs/index exists (an install from an old installer has no specs/ at all).
+__mrok_spec_index() {
+  [ -f "$MROK_HOME/specs/index" ] && return 0
+  __mrok_spec_get index && return 0
+  echo "mrok: can't download the spec index" >&2
   return 1
 }
 
@@ -132,8 +161,10 @@ __mrok_spec_fetch() {
 # $1 = 1: print what happened.
 __mrok_spec_refresh() {
   local dir="$MROK_HOME/specs" f c d off='' nrm=0 nadd=0
-  [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob
-  [ -d "$dir" ] || return 0
+  [ -n "${ZSH_VERSION-}" ] && setopt localoptions nullglob shwordsplit
+  if [ "${1-0}" = 1 ]; then __mrok_spec_index || return 1
+  else [ -d "$dir" ] || return 0
+  fi
   __mrok_now; printf '%s\n' "$REPLY" > "$dir/.refreshed"
   [ -f "$__mrok_spec_off" ] && off="
 $(cat "$__mrok_spec_off")
@@ -147,16 +178,22 @@ $c
     command -v "$c" >/dev/null 2>&1 || { rm -f "$f"; nrm=$((nrm + 1)); }
   done
   if [ -f "$dir/index" ]; then
+    local new=''
     while IFS='	' read -r c d; do
       [ -n "$c" ] && [ ! -f "$dir/$c.spec" ] || continue
       case $off in *"
 $c
 "*) continue ;; esac
-      command -v "$c" >/dev/null 2>&1 || continue
-      if __mrok_spec_fetch "$c"; then
-        nadd=$((nadd + 1)); [ "${1-0}" = 1 ] && echo "mrok: added $c"
-      fi
+      command -v "$c" >/dev/null 2>&1 && new="$new $c"
     done < "$dir/index"
+    [ -n "$new" ] && __mrok_spec_fetch_many $new
+    for c in $new; do
+      if [ -f "$dir/$c.spec" ]; then
+        nadd=$((nadd + 1)); [ "${1-0}" = 1 ] && echo "mrok: added $c"
+      elif [ "${1-0}" = 1 ]; then
+        echo "mrok: download failed: $c" >&2
+      fi
+    done
   fi
   [ "${1-0}" = 1 ] && echo "mrok: removed $nrm, added $nadd specs"
   return 0
@@ -192,8 +229,9 @@ __mrok_spec_cmd() {
       shift
       [ $# -gt 0 ] || { echo "usage: mrok spec add <command>..." >&2; return 2; }
       command -v curl >/dev/null 2>&1 || command -v wget >/dev/null 2>&1 || { echo "mrok: need curl or wget" >&2; return 1; }
+      __mrok_spec_index || return 1
       for c in "$@"; do
-        if [ -f "$dir/index" ] && ! cut -f1 "$dir/index" | grep -qxF "$c"; then
+        if ! cut -f1 "$dir/index" | grep -qxF "$c"; then
           echo "mrok: no spec for '$c' (see: mrok spec available)" >&2; continue
         fi
         __mrok_spec_fetch "$c" || { echo "mrok: download failed: $c" >&2; continue; }
@@ -219,7 +257,10 @@ __mrok_spec_cmd() {
       done
       [ "$n" -gt 0 ] || echo "no specs installed (mrok spec available / mrok spec add <command>)" ;;
     available)
-      [ -f "$dir/index" ] && cut -f1 "$dir/index" | column 2>/dev/null || cut -f1 "$dir/index" ;;
+      __mrok_spec_index || return 1
+      if command -v column >/dev/null 2>&1; then cut -f1 "$dir/index" | column
+      else cut -f1 "$dir/index"
+      fi ;;
     refresh)
       __mrok_spec_refresh 1
       __mrok_load_specs ;;
