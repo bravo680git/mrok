@@ -1,6 +1,6 @@
 # Records demo/demo.gif:  brew install vhs && vhs demo/demo.tape
 # Run it from a git repo with a few branches and a package.json for the best result,
-# with mrok installed (it is sourced from ~/.mrok by zsh's rc file).
+# with mrok installed and loaded from ~/.zshrc.
 
 Output demo/demo.gif
 
@@ -12,8 +12,10 @@ Set Padding 20
 Set TypingSpeed 90ms
 Set Theme "Catppuccin Mocha"
 
+# vhs starts zsh with --no-rcs: load your rc (and with it mrok) off camera
 Hide
-Type "clear" Enter
+Type "source ~/.zshrc && clear" Enter
+Sleep 2s
 Show
 
 # fuzzy: chp -> cherry-pick, then branches
