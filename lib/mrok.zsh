@@ -147,10 +147,29 @@ __mrok_from_plugin() {
   [[ -n $fn ]] || return 1
   seg=( "${(@Q)seg}" )
   local cur=${(Q)word}
-  local key="$PWD|${(pj:\0:)seg}|${cur[1]}"
+  __mrok_cur_class "$cur"
+  local key="$PWD|${(pj:\0:)seg}|$REPLY"
   if (( ! ${+__mrok_pstat[$key]} )); then
-    __mrok_pcache[$key]="$(MROK_CUR=$cur "$fn" "${seg[@]}" 2>/dev/null)"
-    __mrok_pstat[$key]=$?
+    if [[ $fn == __mrok_spec ]]; then
+      # Spec output without generators doesn't depend on $PWD: keep it for the session
+      local skey="${(pj:\0:)seg}|$REPLY"
+      if (( ! ${+__mrok_scache[$skey]} )); then
+        local out
+        out="$(MROK_MARK_STATIC=1 MROK_CUR=$cur "$fn" "${seg[@]}" 2>/dev/null)"
+        local st=$?
+        if [[ $out == (*$'\n'|)'!static' ]]; then
+          __mrok_scache[$skey]="$st${out%'!static'}"
+        else
+          __mrok_pcache[$key]=$out __mrok_pstat[$key]=$st
+        fi
+      fi
+      if (( ${+__mrok_scache[$skey]} )); then
+        __mrok_pcache[$key]=${__mrok_scache[$skey]:1} __mrok_pstat[$key]=${__mrok_scache[$skey][1]}
+      fi
+    else
+      __mrok_pcache[$key]="$(MROK_CUR=$cur "$fn" "${seg[@]}" 2>/dev/null)"
+      __mrok_pstat[$key]=$?
+    fi
   fi
   (( __mrok_pstat[$key] == 0 )) || return 1
 
@@ -164,6 +183,34 @@ __mrok_from_plugin() {
     if [[ $v == *[/=] ]]; then __mrok_s+=( '' ); else __mrok_s+=( ' ' ); fi
     if [[ $line == *$'\t'* ]]; then __mrok_d+=( "${line#*$'\t'}" ); else __mrok_d+=( '' ); fi
   done
+  return 0
+}
+
+# ---------------------------------------------------------------- command names
+# Command position is the hot path (every first word of every line), and running zsh's
+# completion there costs 15-35ms a key. Plain names are looked up in the shell's own
+# tables instead, built once per command line. Returns 1 (use zsh's completion) for
+# anything else: paths, $VAR, quotes, or when no name starts with the word, so the
+# looser matchers (substring, fuzzy) still apply.
+typeset -ga __mrok_cmds
+__mrok_from_commands() {
+  setopt localoptions extendedglob
+  local word=$1
+  [[ -n $word && $word == [[:alnum:]_.+:@%,-]## ]] || return 1
+  if (( ! $#__mrok_cmds )); then
+    __mrok_cmds=( ${(k)commands} ${(k)aliases} ${(k)functions} ${(k)builtins} ${(k)reswords} )
+    __mrok_cmds=( ${(u)__mrok_cmds} )
+  fi
+  local -a hit; hit=( ${(M)__mrok_cmds:#(#i)${(b)word}*} )
+  (( $#hit )) || return 1
+  local x
+  __mrok_c=( "${hit[@]}" ) __mrok_i=() __mrok_s=() __mrok_d=()
+  for x in "${hit[@]}"; do __mrok_i+=( "${(q)x}" ); __mrok_s+=( ' ' ); __mrok_d+=( '' ); done
+  if [[ -o autocd ]]; then
+    for x in (#i)${(b)word}*(N-/); do
+      __mrok_c+=( "$x/" ) __mrok_i+=( "${(q)x}" ) __mrok_s+=( '/' ) __mrok_d+=( '' )
+    done
+  fi
   return 0
 }
 
@@ -255,7 +302,9 @@ __mrok_compute() {
     (( wl > 0 )) && before[-1]=()
     __mrok_from_plugin "$word" "${before[@]}" && plugin=1
   fi
-  (( plugin )) || zle __mrok-complete 2>/dev/null
+  if (( ! plugin )); then
+    (( cmdpos )) && __mrok_from_commands "$word" || zle __mrok-complete 2>/dev/null
+  fi
 
   local -a c ii ss d
   local -A seen
@@ -505,7 +554,7 @@ __mrok_pre_redraw() {
 
 __mrok_line_init() {
   __mrok_last="$BUFFER"$'\0'"$CURSOR"
-  __mrok_pcache=() __mrok_pstat=()
+  __mrok_pcache=() __mrok_pstat=() __mrok_cmds=()
   __mrok_hide
 }
 

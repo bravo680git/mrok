@@ -93,10 +93,28 @@ __mrok_from_plugin() {
   local cmd=${__mrok_seg[0]}
   local fn=${__mrok_plugins[$cmd]-}
   [[ -n $fn ]] || return 1
-  local key="$PWD|${__mrok_seg[*]}|${__mrok_cur:0:1}"
+  __mrok_cur_class "$__mrok_cur"
+  local key="$PWD|${__mrok_seg[*]}|$REPLY"
   if [[ -z ${__mrok_pstat[$key]+x} ]]; then
-    __mrok_pcache[$key]=$(MROK_CUR=$__mrok_cur "$fn" "${__mrok_seg[@]}" 2>/dev/null)
-    __mrok_pstat[$key]=$?
+    if [[ $fn == __mrok_spec ]]; then
+      # Spec output without generators doesn't depend on $PWD: keep it for the session
+      local skey="${__mrok_seg[*]}|$REPLY" out st
+      if [[ -z ${__mrok_scache[$skey]+x} ]]; then
+        out=$(MROK_MARK_STATIC=1 MROK_CUR=$__mrok_cur "$fn" "${__mrok_seg[@]}" 2>/dev/null)
+        st=$?
+        if [[ $out == '!static' || $out == *$'\n!static' ]]; then
+          __mrok_scache[$skey]="$st${out%'!static'}"
+        else
+          __mrok_pcache[$key]=$out __mrok_pstat[$key]=$st
+        fi
+      fi
+      if [[ -n ${__mrok_scache[$skey]+x} ]]; then
+        __mrok_pcache[$key]=${__mrok_scache[$skey]:1} __mrok_pstat[$key]=${__mrok_scache[$skey]:0:1}
+      fi
+    else
+      __mrok_pcache[$key]=$(MROK_CUR=$__mrok_cur "$fn" "${__mrok_seg[@]}" 2>/dev/null)
+      __mrok_pstat[$key]=$?
+    fi
   fi
   (( __mrok_pstat[$key] == 0 )) || return 1
   local line v d suf
@@ -185,14 +203,23 @@ __mrok_from_native() {
   (( ${#paths[@]} )) && __mrok_add_paths "${paths[@]}"
 }
 
+# Command names starting with the first typed character, sorted shortest first (so an
+# exact match comes first), fetched once per command line and first character: running
+# compgen | awk | sort on every key costs several processes.
+__mrok_cmds_key=''
+__mrok_cmds=()
 __mrok_from_commands() {
-  local cur=$__mrok_cur
-  local name
-  while IFS= read -r name; do
-    [[ -z $name ]] && continue
+  local cur=$__mrok_cur name
+  if [[ $__mrok_cmds_key != "k${cur:0:1}" ]]; then
+    __mrok_cmds_key="k${cur:0:1}"
+    mapfile -t __mrok_cmds < <(compgen -c -- "${cur:0:1}" 2>/dev/null | awk '!seen[$0]++ { printf "%05d %s\n", length($0), $0 }' | sort | cut -d' ' -f2-)
+  fi
+  for name in "${__mrok_cmds[@]}"; do
+    [[ -z $name || $name != "$cur"* ]] && continue
     [[ $name == [_.]* && $cur != [_.]* ]] && continue
     __mrok_add "$name" "$name" ' ' ''
-  done < <(compgen -c -- "$cur" 2>/dev/null | awk -v w="$cur" '!seen[$0]++ { printf "%d %05d %s\n", ($0 != w), length($0), $0 }' | sort | head -300 | cut -d' ' -f3-)
+    (( ${#__mrok_c[@]} >= 300 )) && break
+  done
 }
 
 # Keep the best tier that has any match: prefix > substring > fuzzy (the typed
@@ -494,7 +521,7 @@ __mrok_precmd() {
   fi
   __mrok_visible=0
   __mrok_sel=0
-  __mrok_pcache=() __mrok_pstat=()
+  __mrok_pcache=() __mrok_pstat=() __mrok_cmds_key='' __mrok_cmds=()
   __mrok_pdone=0
   __mrok_lastout=''
 }

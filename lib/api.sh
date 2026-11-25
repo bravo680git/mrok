@@ -4,6 +4,8 @@
 MROK_VERSION=0.2.0
 
 typeset -gA __mrok_plugins 2>/dev/null
+# Session-wide cache of spec output that ran no generator (see __mrok_spec)
+typeset -gA __mrok_scache 2>/dev/null
 
 # ---------------------------------------------------------------- plugin API
 #
@@ -84,7 +86,7 @@ mrok_git_branches() {
 __mrok_spec_off="${XDG_CONFIG_HOME:-$HOME/.config}/mrok/specs.off"
 
 __mrok_spec() {
-  local f="$MROK_HOME/specs/$1.spec" out line nat=0 any=0 IFS
+  local f="$MROK_HOME/specs/$1.spec" out line nat=0 any=0 gen=0 IFS
   [ -f "$f" ] || return 1
   shift
   IFS=$(printf '\037')
@@ -94,13 +96,29 @@ __mrok_spec() {
     case $line in
       '') ;;
       '!native') nat=1 ;;
-      '!gen	'*) any=1; (unset IFS; eval "${line#*	}") 2>/dev/null | sed '/^[[:space:]]*$/d' ;;
+      '!gen	'*) any=1; gen=1; (unset IFS; eval "${line#*	}") 2>/dev/null | sed '/^[[:space:]]*$/d' ;;
       *) any=1; printf '%s\n' "$line" ;;
     esac
   done <<EOF
 $out
 EOF
+  # Asked by the popup: say when the output depends only on the spec (no generator ran),
+  # so it can be cached for the whole session instead of for one command line.
+  [ -n "${MROK_MARK_STATIC-}" ] && [ "$gen" = 0 ] && printf '!static\n'
   [ "$any" = 1 ] || [ "$nat" = 0 ]
+}
+
+# REPLY = the part of the word being typed that plugin output may depend on, for the
+# plugin cache key: empty, an option, --option=, or the directory part of a path.
+# Anything else gives the same output, since mrok filters by the word itself.
+__mrok_cur_class() {
+  case $1 in
+    '') REPLY='' ;;
+    -*=*) REPLY="${1%%=*}=" ;;
+    -*) REPLY=- ;;
+    */*) REPLY="w${1%/*}/" ;;
+    *) REPLY=w ;;
+  esac
 }
 
 # For plugins that add dynamic values on top of a spec: where is the cursor?
@@ -290,6 +308,7 @@ __mrok_spec_cmd() {
     *)
       echo "usage: mrok spec [list|available|add <cmd>...|rm <cmd>...|refresh]" >&2; return 2 ;;
   esac
+  __mrok_scache=()
 }
 
 # ---------------------------------------------------------------- loading
