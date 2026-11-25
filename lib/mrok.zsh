@@ -345,8 +345,10 @@ __mrok_compute() {
       3) [[ ${(L)x} == $~fz ]] || continue ;;
       0) (( plugin )) && [[ -n $lw ]] && continue ;;
     esac
-    # Command position: hide internal functions (_xxx, .xxx) and parameters
+    # Command position: hide internal functions (_xxx, .xxx), parameters, and the
+    # commands turned off with `mrok off`
     if (( cmdpos )); then
+      (( ${+__mrok_off[$x]} )) && continue
       [[ $x == [_.]* && $word != [_.]* ]] && continue
       [[ ${__mrok_s[i]} == '=' ]] && continue
     fi

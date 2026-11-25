@@ -80,8 +80,9 @@ mrok_git_branches() {
 }
 
 # ---------------------------------------------------------------- popup off per command
-# `mrok off <cmd>`: no popup at all while typing that command's arguments (not even from
-# the shell's own completion). One command per line in this file.
+# `mrok off <cmd>`: the command is left out of the command-name list, and there's no
+# popup at all while typing its arguments (not even from the shell's own completion).
+# One command per line in this file.
 __mrok_off_file="${XDG_CONFIG_HOME:-$HOME/.config}/mrok/off"
 typeset -gA __mrok_off 2>/dev/null
 
@@ -399,8 +400,8 @@ mrok: as-you-type suggestion popup
 
   mrok plugins     list commands that have a suggestion plugin
   mrok spec        list the commands with a Fig spec (also: available, add, rm, refresh)
-  mrok off <cmd>   no popup for that command's arguments (mrok on <cmd> undoes it,
-                   mrok off alone lists them)
+  mrok off <cmd>   hide a command from the popup, and no popup for its arguments
+                   (mrok on <cmd> undoes it, mrok off alone lists them)
   mrok update      update to the latest version
   mrok uninstall   remove mrok and its line in your shell rc file
   mrok version     print the version

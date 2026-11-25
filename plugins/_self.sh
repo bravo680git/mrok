@@ -7,7 +7,7 @@ __mrok_p_mrok() {
     printf '%s\t%s\n' \
       spec 'manage command specs (from Fig)' \
       plugins 'list commands that have a plugin' \
-      off 'no popup for a command (alone: list them)' \
+      off 'hide a command from the popup (alone: list them)' \
       on 'popup back on for a command' \
       update 'update to the latest version' \
       uninstall 'remove mrok and its rc file block' \

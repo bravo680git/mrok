@@ -217,6 +217,7 @@ __mrok_from_commands() {
   for name in "${__mrok_cmds[@]}"; do
     [[ -z $name || $name != "$cur"* ]] && continue
     [[ $name == [_.]* && $cur != [_.]* ]] && continue
+    [[ -n ${__mrok_off[$name]+x} ]] && continue
     __mrok_add "$name" "$name" ' ' ''
     (( ${#__mrok_c[@]} >= 300 )) && break
   done

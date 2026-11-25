@@ -74,7 +74,7 @@ mrok plugins    list commands that have a plugin
 mrok update     update to the latest version
 mrok uninstall  remove mrok and the block in your rc files
 mrok spec       list installed Fig specs (also: available, add <cmd>, rm <cmd>, refresh)
-mrok off <cmd>  no popup for that command's arguments (mrok on <cmd> undoes it)
+mrok off <cmd>  hide a command from the popup, no popup for its arguments (mrok on <cmd> undoes it)
 ```
 
 ## Configuration
