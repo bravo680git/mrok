@@ -74,6 +74,7 @@ mrok plugins    list commands that have a plugin
 mrok update     update to the latest version
 mrok uninstall  remove mrok and the block in your rc files
 mrok spec       list installed Fig specs (also: available, add <cmd>, rm <cmd>, refresh)
+mrok off <cmd>  no popup for that command's arguments (mrok on <cmd> undoes it)
 ```
 
 ## Configuration
@@ -117,7 +118,9 @@ you type that command.
   access, besides `mrok update`). So only what you use stays on disk. `mrok spec refresh`
   does it right away.
 - `mrok spec add <cmd>` downloads one later (e.g. after installing a new tool),
-  `mrok spec rm <cmd>` removes one and keeps it removed across updates.
+  `mrok spec rm <cmd>` removes one and keeps it removed across updates. The popup then
+  falls back to your shell's completion for that command; to get no popup at all, use
+  `mrok off <cmd>`.
 - Parts that need JavaScript in Fig (e.g. container names for `docker exec`) aren't
   converted; mrok falls back to your shell's completion there. A built-in or user plugin
   for the same command always wins over the spec.

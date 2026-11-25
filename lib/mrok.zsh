@@ -130,7 +130,7 @@ zle -C __mrok-complete complete-word __mrok_complete
 
 # ---------------------------------------------------------------- plugins
 # $1 = current word, $2.. = words before it. Fills the arrays and returns 0 when a
-# plugin handled this position.
+# plugin handled this position, 2 when the popup is off for this command (`mrok off`).
 __mrok_from_plugin() {
   local word=$1; shift
   local -a seg; seg=( "$@" )
@@ -143,6 +143,7 @@ __mrok_from_plugin() {
     shift seg
   done
   (( $#seg )) || return 1
+  (( ${+__mrok_off[${(Q)seg[1]}]} )) && return 2
   local fn=${__mrok_plugins[${seg[1]}]}
   [[ -n $fn ]] || return 1
   seg=( "${(@Q)seg}" )
@@ -300,7 +301,11 @@ __mrok_compute() {
   if (( ! cmdpos )); then
     local -a before; before=( ${(z)LBUFFER} )
     (( wl > 0 )) && before[-1]=()
-    __mrok_from_plugin "$word" "${before[@]}" && plugin=1
+    __mrok_from_plugin "$word" "${before[@]}"
+    case $? in
+      0) plugin=1 ;;
+      2) __mrok_hide; return ;;
+    esac
   fi
   if (( ! plugin )); then
     (( cmdpos )) && __mrok_from_commands "$word" || zle __mrok-complete 2>/dev/null
@@ -555,6 +560,7 @@ __mrok_pre_redraw() {
 __mrok_line_init() {
   __mrok_last="$BUFFER"$'\0'"$CURSOR"
   __mrok_pcache=() __mrok_pstat=() __mrok_cmds=()
+  __mrok_load_off
   __mrok_hide
 }
 

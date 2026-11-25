@@ -79,6 +79,45 @@ mrok_git_branches() {
     --format='%(refname:short)	%(subject)' refs/remotes 2>/dev/null | grep -v '/HEAD	'
 }
 
+# ---------------------------------------------------------------- popup off per command
+# `mrok off <cmd>`: no popup at all while typing that command's arguments (not even from
+# the shell's own completion). One command per line in this file.
+__mrok_off_file="${XDG_CONFIG_HOME:-$HOME/.config}/mrok/off"
+typeset -gA __mrok_off 2>/dev/null
+
+# Called at every new prompt, so `mrok off/on` in one shell reaches the others too.
+__mrok_load_off() {
+  local c
+  __mrok_off=()
+  [ -r "$__mrok_off_file" ] || return 0
+  while IFS= read -r c || [ -n "$c" ]; do
+    [ -n "$c" ] && __mrok_off[$c]=1
+  done < "$__mrok_off_file"
+}
+
+__mrok_off_cmd() {  # $1 = off|on, then commands
+  local mode=$1 c
+  shift
+  if [ $# -eq 0 ]; then
+    if [ "$mode" = on ]; then echo "usage: mrok on <command>..." >&2; return 2; fi
+    if [ -s "$__mrok_off_file" ]; then cat "$__mrok_off_file"
+    else echo "popup is on for every command (mrok off <command> turns it off for one)"
+    fi
+    return 0
+  fi
+  mkdir -p "${__mrok_off_file%/*}"
+  for c in "$@"; do
+    if [ "$mode" = off ]; then
+      grep -qxF -- "$c" "$__mrok_off_file" 2>/dev/null || printf '%s\n' "$c" >> "$__mrok_off_file"
+      echo "mrok: popup off for $c"
+    else
+      [ -f "$__mrok_off_file" ] && { grep -vxF -- "$c" "$__mrok_off_file" > "$__mrok_off_file.tmp"; mv "$__mrok_off_file.tmp" "$__mrok_off_file"; }
+      echo "mrok: popup on for $c"
+    fi
+  done
+  __mrok_load_off
+}
+
 # ---------------------------------------------------------------- Fig specs
 # specs/<cmd>.spec are converted from github.com/withfig/autocomplete (MIT, see
 # specs/LICENSE). __mrok_spec is the plugin for every command that has one.
@@ -314,6 +353,7 @@ __mrok_spec_cmd() {
 # ---------------------------------------------------------------- loading
 __mrok_load_plugins() {
   local f dir
+  __mrok_load_off
   __mrok_load_specs
   for dir in "$MROK_HOME/plugins" "${XDG_CONFIG_HOME:-$HOME/.config}/mrok/plugins"; do
     [ -d "$dir" ] || continue
@@ -349,6 +389,8 @@ mrok() {
       __mrok_list_plugins | grep -v '	__mrok_spec$' | sort ;;
     spec|specs)
       shift; __mrok_spec_cmd "$@" ;;
+    off|on)
+      __mrok_off_cmd "$@" ;;
     version|-v|--version)
       echo "mrok $MROK_VERSION" ;;
     *)
@@ -357,6 +399,8 @@ mrok: as-you-type suggestion popup
 
   mrok plugins     list commands that have a suggestion plugin
   mrok spec        list the commands with a Fig spec (also: available, add, rm, refresh)
+  mrok off <cmd>   no popup for that command's arguments (mrok on <cmd> undoes it,
+                   mrok off alone lists them)
   mrok update      update to the latest version
   mrok uninstall   remove mrok and its line in your shell rc file
   mrok version     print the version

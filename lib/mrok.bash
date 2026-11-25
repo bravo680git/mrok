@@ -264,6 +264,7 @@ __mrok_compute() {
     if [[ -z $__mrok_cur ]] && (( ! force )); then __mrok_visible=0; return; fi
     __mrok_from_commands
   else
+    [[ -n ${__mrok_off[${__mrok_seg[0]}]+x} ]] && { __mrok_visible=0; return; }
     __mrok_from_plugin || __mrok_from_native
   fi
   __mrok_filter
@@ -522,6 +523,7 @@ __mrok_precmd() {
   __mrok_visible=0
   __mrok_sel=0
   __mrok_pcache=() __mrok_pstat=() __mrok_cmds_key='' __mrok_cmds=()
+  __mrok_load_off
   __mrok_pdone=0
   __mrok_lastout=''
 }

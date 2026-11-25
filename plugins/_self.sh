@@ -7,12 +7,20 @@ __mrok_p_mrok() {
     printf '%s\t%s\n' \
       spec 'manage command specs (from Fig)' \
       plugins 'list commands that have a plugin' \
+      off 'no popup for a command (alone: list them)' \
+      on 'popup back on for a command' \
       update 'update to the latest version' \
       uninstall 'remove mrok and its rc file block' \
       version 'print the version' \
       help 'show help'
     return 0
   fi
+  case $2 in
+    off) return 1 ;;  # any command name: let the shell complete it
+    on)
+      [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/mrok/off" ] && cat "${XDG_CONFIG_HOME:-$HOME/.config}/mrok/off"
+      return 0 ;;
+  esac
   [ "$2" = spec ] || [ "$2" = specs ] || return 0
   if [ $# -eq 2 ]; then
     printf '%s\t%s\n' \
